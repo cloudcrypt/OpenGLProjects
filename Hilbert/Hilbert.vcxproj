@@ -80,7 +80,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\libraries\glfw-3.2.1.bin.WIN32\include;..\..\libraries\glew-2.1.0-win32\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\libraries\glfw-3.2.1.bin.WIN32\include;inc;..\..\libraries\glew-2.1.0-win32\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -129,9 +129,6 @@ xcopy /s /y /d "$(ProjectDir)data" "$(OutDir)data\"</Command>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Test.cpp" />
-  </ItemGroup>
   <ItemGroup>
     <None Include="data\fragment.glsl" />
     <None Include="data\vertex.glsl">
@@ -399,6 +396,11 @@ xcopy /s /y /d "$(ProjectDir)data" "$(OutDir)data\"</Command>
     <ClInclude Include="inc\glm\vec4.hpp" />
     <ClInclude Include="inc\glm\vector_relational.hpp" />
     <ClInclude Include="inc\Hilbert.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\boilerplate.cpp" />
+    <ClCompile Include="src\Hilbert.cpp" />
+    <ClCompile Include="src\Test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
