@@ -399,6 +399,7 @@ xcopy /s /y /d "$(ProjectDir)data" "$(OutDir)data\"</Command>
     <ClInclude Include="inc\OpenGL.h" />
     <ClInclude Include="inc\Program.h" />
     <ClInclude Include="inc\Shader.h" />
+    <ClInclude Include="inc\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Program.cpp" />
@@ -406,6 +407,7 @@ xcopy /s /y /d "$(ProjectDir)data" "$(OutDir)data\"</Command>
     <ClCompile Include="src\OpenGL.cpp" />
     <ClCompile Include="src\boilerplate.cpp" />
     <ClCompile Include="src\Hilbert.cpp" />
+    <ClCompile Include="src\VertexArray.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

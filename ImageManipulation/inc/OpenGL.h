@@ -1,8 +1,10 @@
-#pragma once
+#include <string>
+
+using std::string;
+
 class OpenGL
 {
 public:
-	OpenGL();
-	~OpenGL();
+	static bool error(string tag);
 };
 

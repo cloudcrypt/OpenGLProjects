@@ -806,6 +806,9 @@
     <ClInclude Include="inc\Program.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\VertexArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\boilerplate.cpp">
@@ -821,6 +824,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VertexArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

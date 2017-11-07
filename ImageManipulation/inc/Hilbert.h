@@ -9,6 +9,7 @@
 // Date:   October 2017
 // ==========================================================================
 
+#pragma once
 #include <vector>
 #include <algorithm>
 #include "glm/vec3.hpp"
