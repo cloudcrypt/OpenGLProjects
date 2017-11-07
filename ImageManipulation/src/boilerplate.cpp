@@ -32,17 +32,17 @@ using std::endl;
 using std::pow;
 using std::sqrt;
 
-class Program {
+class Program1 {
 	GLuint vertex_shader;
 	GLuint fragment_shader;
 public:
 	GLuint id;
-	Program() {
+	Program1() {
 		vertex_shader = 0;
 		fragment_shader = 0;
 		id = 0;
 	}
-	Program(string vertex_path, string fragment_path) {
+	Program1(string vertex_path, string fragment_path) {
 		init(vertex_path, fragment_path);
 	}
 	void init(string vertex_path, string fragment_path) {
@@ -83,7 +83,7 @@ public:
 		}
 		return shader;
 	}
-	~Program() {
+	~Program1() {
 		glUseProgram(0);
 		glDeleteProgram(id);
 		glDeleteShader(vertex_shader);
@@ -210,7 +210,7 @@ Hilbert h;
 int width = 512;
 int height = 512;
 
-void render(Program &program, VertexArray &va) {
+void render(Program1 &program, VertexArray &va) {
 	// clear screen to a dark grey colour
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -310,7 +310,7 @@ int main(int argc, char *argv[]) {
 		exit(-1);	
 	}
 
-	Program p("data/vertex.glsl", "data/fragment.glsl");
+	Program1 p("data/vertex.glsl", "data/fragment.glsl");
 
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetWindowSizeCallback(window, window_size_callback);
