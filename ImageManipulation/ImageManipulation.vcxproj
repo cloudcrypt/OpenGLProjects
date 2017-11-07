@@ -80,11 +80,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\libraries\glfw-3.2.1.bin.WIN32\include;inc;..\..\libraries\glew-2.1.0-win32\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\libraries\glfw-3.2.1.bin.WIN32\include;inc;..\libraries\glew-2.1.0-win32\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\libraries\glew-2.1.0-win32\glew-2.1.0\lib\Release\Win32;..\..\libraries\glfw-3.2.1.bin.WIN32\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\libraries\glew-2.1.0-win32\glew-2.1.0\lib\Release\Win32;..\libraries\glfw-3.2.1.bin.WIN32\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
@@ -398,6 +398,7 @@ xcopy /s /y /d "$(ProjectDir)data" "$(OutDir)data\"</Command>
     <ClInclude Include="inc\Hilbert.h" />
     <ClInclude Include="inc\OpenGL.h" />
     <ClInclude Include="inc\Program.h" />
+    <ClInclude Include="inc\stb_image.h" />
     <ClInclude Include="inc\VertexArray.h" />
     <ClInclude Include="inc\ShaderProgram.h" />
   </ItemGroup>
