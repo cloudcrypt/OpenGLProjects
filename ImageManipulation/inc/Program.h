@@ -2,6 +2,9 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include "Hilbert.h"
+#include "ShaderProgram.h"
+
+using std::endl;
 
 using std::string;
 
@@ -15,12 +18,14 @@ private:
 
 	bool live = true;
 	GLFWwindow* window = nullptr;
+	ShaderProgram shaderProgram;
 	char *windowName = "ImageManipulation";
 	int width = 1024;
 	int height = 768;
 	void render();
 	bool initGLFW();
 	bool initGLEW();
+	bool initShaders();
 	static void sizeCallback(GLFWwindow* window, int width, int height);
 	void sizeChange(int width, int height);
 	static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);

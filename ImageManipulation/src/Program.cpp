@@ -3,15 +3,19 @@
 #include <iostream>
 #include <GL/glew.h>
 
+#include <cmath>
 #include "Hilbert.h"
 #include "VertexArray.h"
+
+using std::pow;
+using std::sqrt;
 
 using std::cerr;
 using std::endl;
 
 int Program::run(int argc, const char ** argv)
 {
-	if (!initGLFW() || !initGLEW())
+	if (!initGLFW() || !initGLEW() || !initShaders())
 		return -1;
 
 	while (live) {
@@ -34,9 +38,8 @@ void Program::render()
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//glUseProgram(program.id);
+	shaderProgram.bind();
 	va.draw();
-	//glUseProgram(0);
 
 	glfwSwapBuffers(window);
 }
@@ -87,6 +90,20 @@ bool Program::initGLEW()
 	return !OpenGL::error("Program::initGLEW() assert");
 }
 
+bool Program::initShaders()
+{
+	if (!shaderProgram.attachShader("data/vertex.glsl", GL_VERTEX_SHADER))
+		return terminate("Error attaching vertex shader");
+
+	if (!shaderProgram.attachShader("data/fragment.glsl", GL_FRAGMENT_SHADER))
+		return terminate("Error attaching fragment shader");
+
+	if (!shaderProgram.link())
+		return terminate("Error linking shader program");
+
+	return !OpenGL::error("Program::initShaders() assert");
+}
+
 void Program::sizeCallback(GLFWwindow * window, int width, int height)
 {
 	static_cast<Program*>(glfwGetWindowUserPointer(window))->sizeChange(width, height);
@@ -127,7 +144,7 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 			} else {
 				float maxGridAmount = width / 8;
 				float maxNValue = sqrt(maxGridAmount);
-				if (n < maxNValue) {
+				if (n < (int)maxNValue) {
 					n++;
 				}
 			}
