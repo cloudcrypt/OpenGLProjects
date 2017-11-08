@@ -17,6 +17,8 @@ using std::sqrt;
 using std::cerr;
 using std::endl;
 
+GLuint texture;
+
 int Program::run(int argc, const char ** argv)
 {
 	if (!initGLFW() || !initGLEW() || !initShaders())
@@ -40,7 +42,7 @@ int Program::run(int argc, const char ** argv)
 		return -1;
 	}
 
-	GLuint texture;
+	//GLuint texture;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, picWidth, picHeight, 0, GL_RGB, GL_FLOAT, pixels);
@@ -144,12 +146,13 @@ void Program::sizeChange(int width, int height)
 {
 	this->width = width;
 	this->height = height;
-	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+	//glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	
 	glViewport(0, 0, width, height);
 	
-	glClear(GL_COLOR_BUFFER_BIT);
-	glfwSwapBuffers(window);
+	//glClear(GL_COLOR_BUFFER_BIT);
+	render(texture);
+	//glfwSwapBuffers(window);
 }
 
 void Program::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
