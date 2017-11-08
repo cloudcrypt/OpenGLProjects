@@ -32,8 +32,17 @@ int Program::run(int argc, const char ** argv)
 
 void Program::render()
 {
-	h.generate(n, mode);
-	VertexArray va(h.vertices, 2);
+	//h.generate(n, mode);
+	////VertexArray va(vector<float> { -1.0f, -1.0f, 1.0f, -1.0f, 0.0f, 1.0f }, 2);
+	VertexArray va(vector<float> { 
+		-1.0f, -1.0f, 
+		1.0f, 1.0f, 
+		-1.0f, 1.0f, 
+		-1.0f, -1.0f,
+		1.0f, 1.0f,
+		1.0f, -1.0f
+	}, 2);
+	va.setType(GL_TRIANGLES);
 
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
