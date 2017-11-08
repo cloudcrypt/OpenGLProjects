@@ -90,6 +90,39 @@ bool ShaderProgram::link()
 	return true;
 }
 
+bool ShaderProgram::setInt(string variable, GLint value)
+{
+	// Get the uniform's location, if possible
+	GLint location = glGetUniformLocation(id, variable.c_str());
+	if (location < 0)
+		return false;
+
+	glUniform1i(location, value);
+	return true;
+}
+
+bool ShaderProgram::setFloat(string variable, GLfloat value)
+{
+	// Get the uniform's location, if possible
+	GLint location = glGetUniformLocation(id, variable.c_str());
+	if (location < 0)
+		return false;
+
+	glUniform1f(location, value);
+	return true;
+}
+
+bool ShaderProgram::setVec2(string variable, GLfloat value1, GLfloat value2)
+{
+	// Get the uniform's location, if possible
+	GLint location = glGetUniformLocation(id, variable.c_str());
+	if (location < 0)
+		return false;
+
+	glUniform2f(location, value1, value2);
+	return true;
+}
+
 bool ShaderProgram::bind()
 {
 	glUseProgram(id);

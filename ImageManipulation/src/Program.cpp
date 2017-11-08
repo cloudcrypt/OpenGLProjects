@@ -7,6 +7,10 @@
 #include "Hilbert.h"
 #include "VertexArray.h"
 
+#define STBI_FAILURE_USERMSG
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 using std::pow;
 using std::sqrt;
 
@@ -17,9 +21,35 @@ int Program::run(int argc, const char ** argv)
 {
 	if (!initGLFW() || !initGLEW() || !initShaders())
 		return -1;
+	
+	va = new VertexArray(vector<float> { 
+		-1.0f, -1.0f, 0.0f, 0.0f,
+		 1.0f,  1.0f, 1.0f, 1.0f,
+		-1.0f,  1.0f, 0.0f, 1.0f,
+		-1.0f, -1.0f, 0.0f, 0.0f,
+		 1.0f, -1.0f, 1.0f, 0.0f,
+		 1.0f,  1.0f, 1.0f, 1.0f
+	}, 2);
+	va->setType(GL_TRIANGLES);
+
+	int picWidth, picHeight, channels;
+	string fileName = "sign.jpg";
+	float* pixels = stbi_loadf(fileName.c_str(), &picWidth, &picHeight, &channels, 0);
+	if (pixels == nullptr) {
+		cerr << "Error loading image " << fileName << ": " << stbi_failure_reason() << endl;
+		return -1;
+	}
+
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, picWidth, picHeight, 0, GL_RGB, GL_FLOAT, pixels);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(pixels);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	while (live) {
-		render();
+		render(texture);
 		glfwPollEvents();
 		if (glfwWindowShouldClose(window))
 			live = false;
@@ -30,25 +60,17 @@ int Program::run(int argc, const char ** argv)
 	return 0;
 }
 
-void Program::render()
+void Program::render(GLuint texture)
 {
 	//h.generate(n, mode);
 	////VertexArray va(vector<float> { -1.0f, -1.0f, 1.0f, -1.0f, 0.0f, 1.0f }, 2);
-	VertexArray va(vector<float> { 
-		-1.0f, -1.0f, 
-		1.0f, 1.0f, 
-		-1.0f, 1.0f, 
-		-1.0f, -1.0f,
-		1.0f, 1.0f,
-		1.0f, -1.0f
-	}, 2);
-	va.setType(GL_TRIANGLES);
 
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	glBindTexture(GL_TEXTURE_2D, texture);
 	shaderProgram.bind();
-	va.draw();
+	va->draw();
 
 	glfwSwapBuffers(window);
 }

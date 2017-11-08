@@ -3,6 +3,7 @@
 #include <string>
 #include "Hilbert.h"
 #include "ShaderProgram.h"
+#include "VertexArray.h"
 
 using std::endl;
 
@@ -19,10 +20,11 @@ private:
 	bool live = true;
 	GLFWwindow* window = nullptr;
 	ShaderProgram shaderProgram;
+	VertexArray* va;
 	char *windowName = "ImageManipulation";
 	int width = 1024;
 	int height = 768;
-	void render();
+	void render(GLuint texture);
 	bool initGLFW();
 	bool initGLEW();
 	bool initShaders();

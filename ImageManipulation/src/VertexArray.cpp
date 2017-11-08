@@ -30,19 +30,29 @@ VertexArray::VertexArray(vector<GLfloat> data, GLuint dim)
 		return;
 
 	// Tell OpenGL how it is formatted
-	glVertexAttribPointer(0, this->dim, GL_FLOAT, GL_FALSE, 0, 0);
-	if (OpenGL::error("glVertexAttribPointer"))
+	glVertexAttribPointer(0, this->dim, GL_FLOAT, GL_FALSE, (this->dim + 2) * sizeof(GLfloat), 0);
+	if (OpenGL::error("glVertexAttribPointer 0"))
 		return;
 
 	glEnableVertexAttribArray(0);
-	if (OpenGL::error("glEnableVertexAttribArray"))
+	if (OpenGL::error("glEnableVertexAttribArray 0"))
+		return;
+
+	// Tell OpenGL how it is formatted
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, (this->dim + 2) * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+	if (OpenGL::error("glVertexAttribPointer 1"))
+		return;
+
+	glEnableVertexAttribArray(1);
+	if (OpenGL::error("glEnableVertexAttribArray 1"))
 		return;
 
 	// Unbind ourselves
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	verts = data.size() / dim;
+	//verts = data.size() / dim;
+	//verts = 3;
 }
 
 bool VertexArray::draw()
@@ -53,7 +63,7 @@ bool VertexArray::draw()
 		return false;
 
 	// Draw
-	glDrawArrays(prim, 0, verts);
+	glDrawArrays(prim, 0, 6);
 	if (OpenGL::error("glDrawArrays"))
 		return false;
 
