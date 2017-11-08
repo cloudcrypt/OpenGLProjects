@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "glm/gtc/type_ptr.hpp"
 
 using std::cerr;
 using std::endl;
@@ -120,6 +121,17 @@ bool ShaderProgram::setVec2(string variable, GLfloat value1, GLfloat value2)
 		return false;
 
 	glUniform2f(location, value1, value2);
+	return true;
+}
+
+bool ShaderProgram::setMat4(string variable, mat4 mat)
+{
+	// Get the uniform's location if possible
+	GLint location = glGetUniformLocation(id, variable.c_str());
+	if (location < 0)
+		return false;
+
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 	return true;
 }
 

@@ -4,12 +4,20 @@
 #include <GL/glew.h>
 
 #include <cmath>
-#include "Hilbert.h"
+//#include "Hilbert.h"
 #include "VertexArray.h"
 
 #define STBI_FAILURE_USERMSG
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
+#include "glm/mat4x4.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+//#include "glm/gtx/transform.hpp"
+
+using glm::mat4;
+using glm::vec3;
+using glm::scale;
 
 using std::pow;
 using std::sqrt;
@@ -18,6 +26,7 @@ using std::cerr;
 using std::endl;
 
 GLuint texture;
+int picWidth, picHeight, channels;
 
 int Program::run(int argc, const char ** argv)
 {
@@ -34,8 +43,8 @@ int Program::run(int argc, const char ** argv)
 	}, 2);
 	va->setType(GL_TRIANGLES);
 
-	int picWidth, picHeight, channels;
-	string fileName = "sign.jpg";
+	//int picWidth, picHeight, channels;
+	string fileName = "squaregrid.jpg";
 	float* pixels = stbi_loadf(fileName.c_str(), &picWidth, &picHeight, &channels, 0);
 	if (pixels == nullptr) {
 		cerr << "Error loading image " << fileName << ": " << stbi_failure_reason() << endl;
@@ -50,8 +59,25 @@ int Program::run(int argc, const char ** argv)
 	stbi_image_free(pixels);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
+	// Create transform matrix
+	/*float larger = (picWidth >= picHeight) ? picWidth : picHeight;
+	float scaleX = picWidth / larger;
+	float scaleY = picHeight / larger;*/
+
+	float windowAspectRatio = (float)width / (float)height;
+	float imageAspectRatio = (float)picWidth / (float)picHeight;
+	float scaleValue = imageAspectRatio / windowAspectRatio;
+
+	//float scaleX = (float)width / (float)picWidth;
+
+	mat4 trans;
+	trans = scale(trans, vec3(scaleValue, scaleValue, 0.0f));
+	shaderProgram.bind();
+	shaderProgram.setMat4("transform", trans);
+
+
 	while (live) {
-		render(texture);
+		render(texture, picWidth, picHeight);
 		glfwPollEvents();
 		if (glfwWindowShouldClose(window))
 			live = false;
@@ -62,13 +88,39 @@ int Program::run(int argc, const char ** argv)
 	return 0;
 }
 
-void Program::render(GLuint texture)
+void Program::render(GLuint texture, int picWidth, int picHeight)
 {
 	//h.generate(n, mode);
 	////VertexArray va(vector<float> { -1.0f, -1.0f, 1.0f, -1.0f, 0.0f, 1.0f }, 2);
 
-	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+	//glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	//float larger = (picWidth >= picHeight) ? picWidth : picHeight;
+	//float scaleX = picWidth / larger;
+	//float scaleY = picHeight / larger;
+	
+	//float scaleX = (float)width / (float)picWidth;
+	
+	//float aspectRatio = (float)picWidth / (float)picHeight;
+	//float newHeight = (float)width / aspectRatio;
+	//float scaleY = newHeight / (float)picHeight;
+	/*mat4 trans;
+	if (scaleY > 1.0f) {
+		scaleY = 1.0f;
+		float newWidth = aspectRatio * (float)height;
+		scaleX = (float)picWidth / newWidth;
+		trans = scale(trans, vec3(scaleX, 1.0f, 0.0f));
+	}
+	else {
+		trans = scale(trans, vec3(1.0f, scaleY, 0.0f));
+	}*/
+
+	/*mat4 trans;
+	trans = scale(trans, vec3(1.0f, scaleX, 0.0f));
+	shaderProgram.bind();
+	shaderProgram.setMat4("transform", trans);*/
 
 	glBindTexture(GL_TEXTURE_2D, texture);
 	shaderProgram.bind();
@@ -151,7 +203,7 @@ void Program::sizeChange(int width, int height)
 	glViewport(0, 0, width, height);
 	
 	//glClear(GL_COLOR_BUFFER_BIT);
-	render(texture);
+	render(texture, picWidth, picHeight);
 	//glfwSwapBuffers(window);
 }
 
@@ -169,7 +221,7 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 			live = false;
 			break;
 		case GLFW_KEY_UP:
-			if (mode == Hilbert::Mode::Lines) {
+			/*if (mode == Hilbert::Mode::Lines) {
 				float maxGridAmount = width / 16;
 				float maxNValue = sqrt(maxGridAmount);
 				if (n < maxNValue) {
@@ -181,15 +233,25 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 				if (n < (int)maxNValue) {
 					n++;
 				}
-			}
+			}*/
 			break;
 		case GLFW_KEY_DOWN:
-			if (n > 1)
-				n--;
+			/*if (n > 1)
+				n--;*/
 			break;
 		case GLFW_KEY_M:
 			break;
 	}
+}
+
+void Program::scrollCallback(GLFWwindow * window, double xoffset, double yoffset)
+{
+	static_cast<Program*>(glfwGetWindowUserPointer(window))->scrollChange(xoffset, yoffset);
+}
+
+void Program::scrollChange(double xoffset, double yoffset)
+{
+
 }
 
 bool Program::terminate(string message)

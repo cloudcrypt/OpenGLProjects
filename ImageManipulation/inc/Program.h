@@ -1,7 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
-#include "Hilbert.h"
+//#include "Hilbert.h"
 #include "ShaderProgram.h"
 #include "VertexArray.h"
 
@@ -13,9 +13,9 @@ class Program
 {
 private:
 
-	int n = 1;
+	/*int n = 1;
 	Hilbert::Mode mode = Hilbert::Mode::Rectangles;
-	Hilbert h;
+	Hilbert h;*/
 
 	bool live = true;
 	GLFWwindow* window = nullptr;
@@ -24,7 +24,7 @@ private:
 	char *windowName = "ImageManipulation";
 	int width = 1024;
 	int height = 768;
-	void render(GLuint texture);
+	void render(GLuint texture, int w, int h);
 	bool initGLFW();
 	bool initGLEW();
 	bool initShaders();
@@ -32,6 +32,8 @@ private:
 	void sizeChange(int width, int height);
 	static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void keyInput(int key, int scancode, int action, int mods);
+	static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+	void scrollChange(double xoffset, double yoffset);
 	bool terminate(string message);
 public:
 	Program() { }
