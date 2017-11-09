@@ -208,6 +208,18 @@ void Program::setTransform()
 	shaderProgram.setMat4("transform", transform);
 }
 
+void Program::setQuantizationLevel(int level)
+{
+	shaderProgram.bind();
+	shaderProgram.setInt("quantizationLevel", level);
+}
+
+void Program::setGrayscale()
+{
+	shaderProgram.bind();
+	shaderProgram.setInt("grayscale", grayscale);
+}
+
 void Program::sizeCallback(GLFWwindow * window, int width, int height)
 {
 	static_cast<Program*>(glfwGetWindowUserPointer(window))->sizeChange(width, height);
@@ -235,9 +247,17 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 {
 	if (action == GLFW_RELEASE)
 		return;
+	if ((key >= 49) && (key <= 56)) {
+		setQuantizationLevel(key - 48);
+		return;
+	}
 	switch (key) {
 		case GLFW_KEY_Q:
 			live = false;
+			break;
+		case GLFW_KEY_G:
+			grayscale = !grayscale;
+			setGrayscale();
 			break;
 		case GLFW_KEY_UP:
 			/*if (mode == Hilbert::Mode::Lines) {

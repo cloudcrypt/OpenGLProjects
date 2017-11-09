@@ -27,6 +27,7 @@ private:
 	int height = 1024;
 	float scaleFactor = 1.0f;
 	bool buttonPressed = false;
+	bool grayscale = false;
 	vec2 pressOrigin;
 	vec2 previousTranslation = vec2(0.0, 0.0);
 	vec2 translation = vec2(0.0, 0.0);
@@ -35,6 +36,8 @@ private:
 	bool initGLEW();
 	bool initShaders();
 	void setTransform();
+	void setQuantizationLevel(int level);
+	void setGrayscale();
 	static void sizeCallback(GLFWwindow* window, int width, int height);
 	void sizeChange(int width, int height);
 	static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
