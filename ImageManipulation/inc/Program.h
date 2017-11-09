@@ -9,6 +9,7 @@
 using std::endl;
 using std::string;
 using glm::vec2;
+using glm::vec3;
 
 class Program
 {
@@ -23,7 +24,7 @@ private:
 	ShaderProgram shaderProgram;
 	VertexArray* va;
 	VertexArray* va2;
-	mat4 scaling;
+	mat4 model;
 	mat4 transform;
 	char *windowName = "ImageManipulation";
 	int width = 1024;
@@ -34,6 +35,9 @@ private:
 	bool buttonPressed = false;
 	bool grayscale = false;
 	bool curveMode = false;
+	vec3 reverseTranslation = vec3(0.0, 0.0, 0.0);
+	vec3 reverseScaling = vec3(1.0, 1.0, 1.0);
+	vec3 aspectRatioScaling = vec3(1.0, 1.0, 1.0);
 	vec2 pressOrigin;
 	vec2 releaseLocation;
 	vec2 previousTranslation = vec2(0.0, 0.0);
@@ -42,6 +46,7 @@ private:
 	bool initGLFW();
 	bool initGLEW();
 	bool initShaders();
+	void setModel();
 	void setTransform();
 	void setQuantizationLevel(int level);
 	void setGrayscale();

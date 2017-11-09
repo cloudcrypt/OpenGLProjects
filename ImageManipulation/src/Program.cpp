@@ -99,10 +99,13 @@ int Program::run(int argc, const char ** argv)
 
 	//float scaleX = (float)width / (float)picWidth;
 
-	scaling = mat4();
+	//scaling = mat4();
 	//scaling = scale(scaling, vec3(scaleX, scaleY, 1.0f));
-	shaderProgram.bind();
-	shaderProgram.setMat4("scaling", scaling);
+	aspectRatioScaling = vec3(scaleX, scaleY, 1.0f);
+
+	setModel();
+	//shaderProgram.bind();
+	//shaderProgram.setMat4("scaling", scaling);
 
 	/*mat4 scaling;
 	scaling = scale(scaling, vec3(scaleFactor, scaleFactor, 0.0f));
@@ -232,6 +235,16 @@ bool Program::initShaders()
 	return !OpenGL::error("Program::initShaders() assert");
 }
 
+void Program::setModel()
+{
+	model = mat4();
+	model = translate(model, reverseTranslation);
+	model = scale(model, reverseScaling);
+	model = scale(model, aspectRatioScaling);
+	shaderProgram.bind();
+	shaderProgram.setMat4("model", model);
+}
+
 void Program::setTransform()
 {
 	transform = mat4();
@@ -262,20 +275,20 @@ void Program::sizeChange(int width, int height)
 {
 	//glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
-	vec3 reverseTranslation = vec3();
 	reverseTranslation = vec3(-(width - this->originalWidth), -(height - this->originalHeight), 0.0);
-	reverseTranslation.x *= (2 / (float)width);
-	reverseTranslation.y *= (2 / (float)height);
+	reverseTranslation.x *= (2 / (double)width);
+	reverseTranslation.y *= (2 / (double)height);
 	//reverseTranslation.x *= 0.75;
 	//reverseTranslation.y *= 0.75;
 	
-	scaling = mat4();
-	scaling = translate(scaling, reverseTranslation);
-	scaling = scale(scaling, vec3((float)1 / ((float)width / (float)(this->originalWidth)), (float)1 / ((float)height / (float)(this->originalHeight)), 1.0f));
+	//scaling = mat4();
+	//scaling = translate(scaling, reverseTranslation);
+	//scaling = scale(scaling, vec3((double)1 / ((double)width / (double)(this->originalWidth)), (double)1 / ((double)height / (double)(this->originalHeight)), 1.0f));
+	reverseScaling = vec3((double)1 / ((double)width / (double)(this->originalWidth)), (double)1 / ((double)height / (double)(this->originalHeight)), 1.0f);
 
-
-	shaderProgram.bind();
-	shaderProgram.setMat4("scaling", scaling);
+	setModel();
+	//shaderProgram.bind();
+	//shaderProgram.setMat4("scaling", scaling);
 
 	glViewport(0, 0, width, height);
 	render(texture, picWidth, picHeight);
@@ -383,7 +396,7 @@ void Program::mouseButtonInput(int button, int action, int mods)
 				cerr << "click at " << releaseLocation.x << " " << releaseLocation.y << endl;
 				//mat4 inverseScaling = glm::transpose(scaling);
 				//mat4 inverseTransform = transform;
-				mat4 transformMatrix = transform * scaling;
+				mat4 transformMatrix = transform * model;
 				mat4 inverse = glm::inverse(transformMatrix);
 				glm::vec4 vertice = glm::vec4(releaseLocation, 0.0, 1.0);
 				//releaseLocation = glm::inverse(transformMatrix) * glm::vec4(releaseLocation, 0.0, 1.0);
