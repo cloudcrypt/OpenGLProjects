@@ -28,6 +28,7 @@ private:
 	float scaleFactor = 1.0f;
 	bool buttonPressed = false;
 	vec2 pressOrigin;
+	vec2 previousTranslation = vec2(0.0, 0.0);
 	vec2 translation = vec2(0.0, 0.0);
 	void render(GLuint texture, int w, int h);
 	bool initGLFW();

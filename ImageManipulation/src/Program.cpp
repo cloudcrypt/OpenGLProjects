@@ -297,8 +297,9 @@ void Program::mouseButtonInput(int button, int action, int mods)
 		}
 		else if (action == GLFW_RELEASE) {
 			buttonPressed = false;
-			translation = vec2(0.0, 0.0);
-			setTransform();
+			previousTranslation = translation;
+			//translation = vec2(0.0, 0.0);
+			//setTransform();
 		}
 	}
 }
@@ -315,6 +316,7 @@ void Program::cursorPositionChange(double xPos, double yPos)
 		translation.y = -translation.y;
 		translation.x *= (2 / (float)width);
 		translation.y *= (2 / (float)height);
+		translation = previousTranslation + translation;
 		setTransform();
 		//cerr << translation.x << " " << translation.y << endl;
 	}
