@@ -44,7 +44,7 @@ int Program::run(int argc, const char ** argv)
 	va->setType(GL_TRIANGLES);
 
 	//int picWidth, picHeight, channels;
-	string fileName = "squaregrid.jpg";
+	string fileName = "sign.jpg";
 	float* pixels = stbi_loadf(fileName.c_str(), &picWidth, &picHeight, &channels, 0);
 	if (pixels == nullptr) {
 		cerr << "Error loading image " << fileName << ": " << stbi_failure_reason() << endl;
@@ -60,21 +60,26 @@ int Program::run(int argc, const char ** argv)
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// Create transform matrix
-	/*float larger = (picWidth >= picHeight) ? picWidth : picHeight;
+	float larger = (picWidth >= picHeight) ? picWidth : picHeight;
 	float scaleX = picWidth / larger;
-	float scaleY = picHeight / larger;*/
+	float scaleY = picHeight / larger;
 
-	float windowAspectRatio = (float)width / (float)height;
+	/*float windowAspectRatio = (float)width / (float)height;
 	float imageAspectRatio = (float)picWidth / (float)picHeight;
-	float scaleValue = imageAspectRatio / windowAspectRatio;
+	float scaleValue = imageAspectRatio / windowAspectRatio;*/
 
 	//float scaleX = (float)width / (float)picWidth;
 
 	mat4 trans;
-	trans = scale(trans, vec3(scaleValue, scaleValue, 0.0f));
+	trans = scale(trans, vec3(scaleX, scaleY, 0.0f));
 	shaderProgram.bind();
 	shaderProgram.setMat4("transform", trans);
 
+	/*mat4 scaling;
+	scaling = scale(scaling, vec3(scaleFactor, scaleFactor, 0.0f));
+	shaderProgram.bind();
+	shaderProgram.setMat4("scaling", scaling);*/
+	setScaling();
 
 	while (live) {
 		render(texture, picWidth, picHeight);
@@ -157,10 +162,14 @@ bool Program::initGLFW()
 		cerr << description << endl;
 	});
 
+	//glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 1);
 	glfwSetWindowUserPointer(window, this);
 	// Set up a callbacks
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetWindowSizeCallback(window, sizeCallback);
+	glfwSetScrollCallback(window, scrollCallback);
+	glfwSetMouseButtonCallback(window, mouseButtonCallback);
+	glfwSetCursorPosCallback(window, cursorPositionCallback);
 
 	return !OpenGL::error("Program::initGLFW() assert");
 }
@@ -187,6 +196,14 @@ bool Program::initShaders()
 		return terminate("Error linking shader program");
 
 	return !OpenGL::error("Program::initShaders() assert");
+}
+
+void Program::setScaling()
+{
+	mat4 scaling;
+	scaling = scale(scaling, vec3(scaleFactor, scaleFactor, 0.0f));
+	shaderProgram.bind();
+	shaderProgram.setMat4("scaling", scaling);
 }
 
 void Program::sizeCallback(GLFWwindow * window, int width, int height)
@@ -251,7 +268,44 @@ void Program::scrollCallback(GLFWwindow * window, double xoffset, double yoffset
 
 void Program::scrollChange(double xoffset, double yoffset)
 {
+	if (yoffset < 0) {
+		scaleFactor *= 1.1;
+		setScaling();
+	}
+	else if (yoffset > 0) {
+		scaleFactor *= 0.9;
+		setScaling();
+	}
+}
 
+void Program::mouseButtonCallback(GLFWwindow * window, int button, int action, int mods)
+{
+	static_cast<Program*>(glfwGetWindowUserPointer(window))->mouseButtonInput(button, action, mods);
+}
+
+void Program::mouseButtonInput(int button, int action, int mods)
+{
+	if (button == GLFW_MOUSE_BUTTON_LEFT) {
+		//int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+		if (action == GLFW_PRESS) {
+			buttonPressed = true;
+		}
+		else if (action == GLFW_RELEASE) {
+			buttonPressed = false;
+		}
+	}
+}
+
+void Program::cursorPositionCallback(GLFWwindow * window, double xPos, double yPos)
+{
+	static_cast<Program*>(glfwGetWindowUserPointer(window))->cursonPositionChange(xPos, yPos);
+}
+
+void Program::cursonPositionChange(double xPos, double yPos)
+{
+	if (buttonPressed) {
+		cerr << "pan!" << endl;
+	}
 }
 
 bool Program::terminate(string message)
