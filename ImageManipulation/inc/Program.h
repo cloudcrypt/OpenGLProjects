@@ -24,6 +24,7 @@ private:
 	ShaderProgram shaderProgram;
 	VertexArray* va;
 	VertexArray* va2;
+	vector<float> controlPoints;
 	mat4 model;
 	mat4 transform;
 	char *windowName = "ImageManipulation";

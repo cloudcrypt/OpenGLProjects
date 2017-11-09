@@ -30,11 +30,6 @@ using std::endl;
 GLuint texture;
 int picWidth, picHeight, channels;
 
-vector<float> points {
-	-0.5f,  0.5f, 0.5f,  0.5f,
-	-0.5f, -0.5f, 0.5f, -0.5f
-};
-
 int Program::run(int argc, const char ** argv)
 {
 	if (!initGLFW() || !initGLEW() || !initShaders())
@@ -70,7 +65,11 @@ int Program::run(int argc, const char ** argv)
 		-0.5f, -0.5f, 0.5f, -0.5f
 	}, 2, 4, false);
 	va2->setType(GL_POINTS);*/
-	va2 = new VertexArray(points, 2, points.size() / 2, false);
+	controlPoints = vector<float> {
+		-0.5f,  0.5f, 0.5f,  0.5f,
+		-0.5f, -0.5f, 0.5f, -0.5f
+	};
+	va2 = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
 	va2->setType(GL_POINTS);
 	glEnable(GL_PROGRAM_POINT_SIZE);
 
@@ -436,10 +435,10 @@ void Program::mouseButtonInput(int button, int action, int mods)
 				//releaseLocation = unScale * unTransformScale * unTranslate * vertice;
 				releaseLocation = inverse * vertice;
 				cerr << "point at " << releaseLocation.x << " " << releaseLocation.y << endl;
-				points.push_back(releaseLocation.x);
-				points.push_back(releaseLocation.y);
+				controlPoints.push_back(releaseLocation.x);
+				controlPoints.push_back(releaseLocation.y);
 
-				va2 = new VertexArray(points, 2, points.size() / 2, false);
+				va2 = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
 				va2->setType(GL_POINTS);
 			}
 			//translation = vec2(0.0, 0.0);
