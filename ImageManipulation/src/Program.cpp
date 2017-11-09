@@ -70,6 +70,8 @@ int Program::run(int argc, const char ** argv)
 		-0.5f, -0.5f, 0.5f, -0.5f
 	}, 2, 4, false);
 	va2->setType(GL_POINTS);*/
+	va2 = new VertexArray(points, 2, points.size() / 2, false);
+	va2->setType(GL_POINTS);
 	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	//int picWidth, picHeight, channels;
@@ -163,10 +165,8 @@ void Program::render(GLuint texture, int picWidth, int picHeight)
 	shaderProgram.bind();
 	shaderProgram.setInt("curve", false);
 	va->draw();
-	//shaderProgram.setInt("curve", true);
-	//va2 = new VertexArray(points, 2, points.size() / 2, false);
-	//va2->setType(GL_POINTS);
-	//va2->draw();
+	shaderProgram.setInt("curve", true);
+	va2->draw();
 
 	glfwSwapBuffers(window);
 }
@@ -266,6 +266,10 @@ void Program::setGrayscale()
 	shaderProgram.setInt("grayscale", grayscale);
 }
 
+void Program::prepareControlPoints()
+{
+}
+
 void Program::sizeCallback(GLFWwindow * window, int width, int height)
 {
 	static_cast<Program*>(glfwGetWindowUserPointer(window))->sizeChange(width, height);
@@ -320,6 +324,8 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 		case GLFW_KEY_G:
 			grayscale = !grayscale;
 			setGrayscale();
+			break;
+		case GLFW_KEY_R:
 			break;
 		case GLFW_KEY_C:
 			curveMode = !curveMode;
@@ -432,6 +438,9 @@ void Program::mouseButtonInput(int button, int action, int mods)
 				cerr << "point at " << releaseLocation.x << " " << releaseLocation.y << endl;
 				points.push_back(releaseLocation.x);
 				points.push_back(releaseLocation.y);
+
+				va2 = new VertexArray(points, 2, points.size() / 2, false);
+				va2->setType(GL_POINTS);
 			}
 			//translation = vec2(0.0, 0.0);
 			//setTransform();
