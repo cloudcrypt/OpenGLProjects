@@ -18,6 +18,7 @@
 using glm::mat4;
 using glm::vec3;
 using glm::scale;
+using glm::translate;
 
 using std::pow;
 using std::sqrt;
@@ -70,16 +71,16 @@ int Program::run(int argc, const char ** argv)
 
 	//float scaleX = (float)width / (float)picWidth;
 
-	mat4 trans;
-	trans = scale(trans, vec3(scaleX, scaleY, 0.0f));
+	mat4 scaling;
+	scaling = scale(scaling, vec3(scaleX, scaleY, 0.0f));
 	shaderProgram.bind();
-	shaderProgram.setMat4("transform", trans);
+	shaderProgram.setMat4("scaling", scaling);
 
 	/*mat4 scaling;
 	scaling = scale(scaling, vec3(scaleFactor, scaleFactor, 0.0f));
 	shaderProgram.bind();
 	shaderProgram.setMat4("scaling", scaling);*/
-	setScaling();
+	setTransform();
 
 	while (live) {
 		render(texture, picWidth, picHeight);
@@ -198,12 +199,13 @@ bool Program::initShaders()
 	return !OpenGL::error("Program::initShaders() assert");
 }
 
-void Program::setScaling()
+void Program::setTransform()
 {
-	mat4 scaling;
-	scaling = scale(scaling, vec3(scaleFactor, scaleFactor, 0.0f));
+	mat4 transform;
+	transform = translate(transform, vec3(translation, 0.0));
+	transform = scale(transform, vec3(scaleFactor, scaleFactor, 0.0f));
 	shaderProgram.bind();
-	shaderProgram.setMat4("scaling", scaling);
+	shaderProgram.setMat4("transform", transform);
 }
 
 void Program::sizeCallback(GLFWwindow * window, int width, int height)
@@ -261,20 +263,20 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 	}
 }
 
-void Program::scrollCallback(GLFWwindow * window, double xoffset, double yoffset)
+void Program::scrollCallback(GLFWwindow * window, double xOffset, double yOffset)
 {
-	static_cast<Program*>(glfwGetWindowUserPointer(window))->scrollChange(xoffset, yoffset);
+	static_cast<Program*>(glfwGetWindowUserPointer(window))->scrollChange(xOffset, yOffset);
 }
 
-void Program::scrollChange(double xoffset, double yoffset)
+void Program::scrollChange(double xOffset, double yOffset)
 {
-	if (yoffset < 0) {
+	if (yOffset > 0) {
 		scaleFactor *= 1.1;
-		setScaling();
+		setTransform();
 	}
-	else if (yoffset > 0) {
+	else if (yOffset < 0) {
 		scaleFactor *= 0.9;
-		setScaling();
+		setTransform();
 	}
 }
 
@@ -289,22 +291,32 @@ void Program::mouseButtonInput(int button, int action, int mods)
 		//int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 		if (action == GLFW_PRESS) {
 			buttonPressed = true;
+			double xPos, yPos;
+			glfwGetCursorPos(window, &xPos, &yPos);
+			pressOrigin = vec2(xPos, yPos);
 		}
 		else if (action == GLFW_RELEASE) {
 			buttonPressed = false;
+			translation = vec2(0.0, 0.0);
+			setTransform();
 		}
 	}
 }
 
 void Program::cursorPositionCallback(GLFWwindow * window, double xPos, double yPos)
 {
-	static_cast<Program*>(glfwGetWindowUserPointer(window))->cursonPositionChange(xPos, yPos);
+	static_cast<Program*>(glfwGetWindowUserPointer(window))->cursorPositionChange(xPos, yPos);
 }
 
-void Program::cursonPositionChange(double xPos, double yPos)
+void Program::cursorPositionChange(double xPos, double yPos)
 {
 	if (buttonPressed) {
-		cerr << "pan!" << endl;
+		translation = vec2(xPos, yPos) - pressOrigin;
+		translation.y = -translation.y;
+		translation.x *= (2 / (float)width);
+		translation.y *= (2 / (float)height);
+		setTransform();
+		//cerr << translation.x << " " << translation.y << endl;
 	}
 }
 
