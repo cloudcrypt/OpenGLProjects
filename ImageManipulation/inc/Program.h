@@ -27,7 +27,9 @@ private:
 	mat4 transform;
 	char *windowName = "ImageManipulation";
 	int width = 1024;
+	int originalWidth = width;
 	int height = 1024;
+	int originalHeight = height;
 	float scaleFactor = 1.0f;
 	bool buttonPressed = false;
 	bool grayscale = false;

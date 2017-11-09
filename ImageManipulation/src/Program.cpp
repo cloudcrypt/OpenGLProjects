@@ -50,6 +50,17 @@ int Program::run(int argc, const char ** argv)
 	}, 2, 6, true);
 	va->setType(GL_TRIANGLES);
 
+	/*va = new VertexArray(vector<float> { 
+		-0.5f, -0.5f,
+		 0.5f,  0.5f,
+		-0.5f,  0.5f,
+		-0.5f, -0.5f,
+		 0.5f, -0.5f,
+		 0.5f,  0.5f
+	}, 2, 6, false);
+	va->setType(GL_TRIANGLES);*/
+
+
 	/*vector<float> points {
 		-0.5f,  0.5f, 0.5f,  0.5f,
 		-0.5f, -0.5f, 0.5f, -0.5f
@@ -89,7 +100,7 @@ int Program::run(int argc, const char ** argv)
 	//float scaleX = (float)width / (float)picWidth;
 
 	scaling = mat4();
-	scaling = scale(scaling, vec3(scaleX, scaleY, 1.0f));
+	//scaling = scale(scaling, vec3(scaleX, scaleY, 1.0f));
 	shaderProgram.bind();
 	shaderProgram.setMat4("scaling", scaling);
 
@@ -149,10 +160,10 @@ void Program::render(GLuint texture, int picWidth, int picHeight)
 	shaderProgram.bind();
 	shaderProgram.setInt("curve", false);
 	va->draw();
-	shaderProgram.setInt("curve", true);
-	va2 = new VertexArray(points, 2, points.size() / 2, false);
-	va2->setType(GL_POINTS);
-	va2->draw();
+	//shaderProgram.setInt("curve", true);
+	//va2 = new VertexArray(points, 2, points.size() / 2, false);
+	//va2->setType(GL_POINTS);
+	//va2->draw();
 
 	glfwSwapBuffers(window);
 }
@@ -249,15 +260,31 @@ void Program::sizeCallback(GLFWwindow * window, int width, int height)
 
 void Program::sizeChange(int width, int height)
 {
-	this->width = width;
-	this->height = height;
 	//glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+
+	vec3 reverseTranslation = vec3();
+	reverseTranslation = vec3(-(width - this->originalWidth), -(height - this->originalHeight), 0.0);
+	reverseTranslation.x *= (2 / (float)width);
+	reverseTranslation.y *= (2 / (float)height);
+	//reverseTranslation.x *= 0.75;
+	//reverseTranslation.y *= 0.75;
 	
+	scaling = mat4();
+	scaling = translate(scaling, reverseTranslation);
+	scaling = scale(scaling, vec3((float)1 / ((float)width / (float)(this->originalWidth)), (float)1 / ((float)height / (float)(this->originalHeight)), 1.0f));
+
+
+	shaderProgram.bind();
+	shaderProgram.setMat4("scaling", scaling);
+
 	glViewport(0, 0, width, height);
+	render(texture, picWidth, picHeight);
 	
 	//glClear(GL_COLOR_BUFFER_BIT);
 	//render(texture, picWidth, picHeight);
 	//glfwSwapBuffers(window);
+	this->width = width;
+	this->height = height;
 }
 
 void Program::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
