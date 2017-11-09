@@ -22,13 +22,18 @@ private:
 	GLFWwindow* window = nullptr;
 	ShaderProgram shaderProgram;
 	VertexArray* va;
+	VertexArray* va2;
+	mat4 scaling;
+	mat4 transform;
 	char *windowName = "ImageManipulation";
 	int width = 1024;
 	int height = 1024;
 	float scaleFactor = 1.0f;
 	bool buttonPressed = false;
 	bool grayscale = false;
+	bool curveMode = false;
 	vec2 pressOrigin;
+	vec2 releaseLocation;
 	vec2 previousTranslation = vec2(0.0, 0.0);
 	vec2 translation = vec2(0.0, 0.0);
 	void render(GLuint texture, int w, int h);

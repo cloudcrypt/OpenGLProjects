@@ -13,6 +13,7 @@
 
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/matrix_inverse.hpp"
 //#include "glm/gtx/transform.hpp"
 
 using glm::mat4;
@@ -29,6 +30,11 @@ using std::endl;
 GLuint texture;
 int picWidth, picHeight, channels;
 
+vector<float> points {
+	-0.5f,  0.5f, 0.5f,  0.5f,
+	-0.5f, -0.5f, 0.5f, -0.5f
+};
+
 int Program::run(int argc, const char ** argv)
 {
 	if (!initGLFW() || !initGLEW() || !initShaders())
@@ -41,8 +47,19 @@ int Program::run(int argc, const char ** argv)
 		-1.0f, -1.0f, 0.0f, 0.0f,
 		 1.0f, -1.0f, 1.0f, 0.0f,
 		 1.0f,  1.0f, 1.0f, 1.0f
-	}, 2);
+	}, 2, 6, true);
 	va->setType(GL_TRIANGLES);
+
+	/*vector<float> points {
+		-0.5f,  0.5f, 0.5f,  0.5f,
+		-0.5f, -0.5f, 0.5f, -0.5f
+	};*/
+	/*va2 = new VertexArray(vector<float> { 
+		-0.5f,  0.5f, 0.5f,  0.5f,
+		-0.5f, -0.5f, 0.5f, -0.5f
+	}, 2, 4, false);
+	va2->setType(GL_POINTS);*/
+	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	//int picWidth, picHeight, channels;
 	string fileName = "sign.jpg";
@@ -71,7 +88,7 @@ int Program::run(int argc, const char ** argv)
 
 	//float scaleX = (float)width / (float)picWidth;
 
-	mat4 scaling;
+	scaling = mat4();
 	scaling = scale(scaling, vec3(scaleX, scaleY, 0.0f));
 	shaderProgram.bind();
 	shaderProgram.setMat4("scaling", scaling);
@@ -130,7 +147,12 @@ void Program::render(GLuint texture, int picWidth, int picHeight)
 
 	glBindTexture(GL_TEXTURE_2D, texture);
 	shaderProgram.bind();
+	shaderProgram.setInt("curve", false);
 	va->draw();
+	shaderProgram.setInt("curve", true);
+	va2 = new VertexArray(points, 2, points.size() / 2, false);
+	va2->setType(GL_POINTS);
+	va2->draw();
 
 	glfwSwapBuffers(window);
 }
@@ -201,7 +223,7 @@ bool Program::initShaders()
 
 void Program::setTransform()
 {
-	mat4 transform;
+	transform = mat4();
 	transform = translate(transform, vec3(translation, 0.0));
 	transform = scale(transform, vec3(scaleFactor, scaleFactor, 0.0f));
 	shaderProgram.bind();
@@ -259,6 +281,9 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 			grayscale = !grayscale;
 			setGrayscale();
 			break;
+		case GLFW_KEY_C:
+			curveMode = !curveMode;
+			break;
 		case GLFW_KEY_UP:
 			/*if (mode == Hilbert::Mode::Lines) {
 				float maxGridAmount = width / 16;
@@ -310,14 +335,63 @@ void Program::mouseButtonInput(int button, int action, int mods)
 	if (button == GLFW_MOUSE_BUTTON_LEFT) {
 		//int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 		if (action == GLFW_PRESS) {
-			buttonPressed = true;
+			if (!curveMode) {
+				buttonPressed = true;
+			}
 			double xPos, yPos;
 			glfwGetCursorPos(window, &xPos, &yPos);
 			pressOrigin = vec2(xPos, yPos);
 		}
 		else if (action == GLFW_RELEASE) {
-			buttonPressed = false;
-			previousTranslation = translation;
+			if (!curveMode) {
+				buttonPressed = false;
+				previousTranslation = translation;
+			}
+			double xPos, yPos;
+			glfwGetCursorPos(window, &xPos, &yPos);
+			releaseLocation = vec2(xPos, yPos);
+			if (releaseLocation == pressOrigin) {
+				releaseLocation.x = (releaseLocation.x / (width / (float)2)) - 1.0;
+				releaseLocation.y = ((height - releaseLocation.y) / (height / (float)2)) - 1.0;
+				cerr << "click at " << releaseLocation.x << " " << releaseLocation.y << endl;
+				//mat4 inverseScaling = glm::transpose(scaling);
+				//mat4 inverseTransform = transform;
+				mat4 transformMatrix = transform * scaling;
+				mat4 inverse = glm::affineInverse(transformMatrix);
+				glm::vec4 vertice = glm::vec4(releaseLocation, 0.0, 1.0);
+				//releaseLocation = glm::inverse(transformMatrix) * glm::vec4(releaseLocation, 0.0, 1.0);
+
+				float larger = (picWidth >= picHeight) ? picWidth : picHeight;
+				float scaleX = picWidth / larger;
+				float scaleY = picHeight / larger;
+				mat4 temp = mat4();
+				temp = scale(temp, vec3(1/scaleX, 1/scaleY, 0.0f));
+				mat4 original = mat4();
+				original = scale(original, vec3(scaleX, scaleY, 0.0f));
+
+				mat4 unTranslate = transform;
+				unTranslate[0].x = 1;
+				unTranslate[1].y = 1;
+				unTranslate[3].x = -unTranslate[3].x;
+				unTranslate[3].y = -unTranslate[3].y;
+
+				mat4 unTransformScale = transform;
+				unTransformScale[0].x = 1 / unTransformScale[0].x;
+				unTransformScale[1].y = 1 / unTransformScale[1].y;
+				unTransformScale[3].x = 0;
+				unTransformScale[3].y = 0;
+
+				mat4 inverseTransform = glm::affineInverse(transform);
+
+				mat4 unScale = scaling;
+				unScale[0].x = 1 / unScale[0].x;
+				unScale[1].y = 1 / unScale[1].y;
+
+				releaseLocation = unScale * unTransformScale * unTranslate * vertice;
+				cerr << "point at " << releaseLocation.x << " " << releaseLocation.y << endl;
+				points.push_back(releaseLocation.x);
+				points.push_back(releaseLocation.y);
+			}
 			//translation = vec2(0.0, 0.0);
 			//setTransform();
 		}

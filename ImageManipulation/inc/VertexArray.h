@@ -14,7 +14,7 @@ private:
 	GLuint verts;
 	GLenum prim = GL_TRIANGLES;
 public:
-	VertexArray(vector<GLfloat> data, GLuint dim);
+	VertexArray(vector<GLfloat> data, GLuint dim, GLuint verts, bool enableTextureCoords);
 	bool draw();
 	bool setType(GLenum type);
 };

@@ -7,6 +7,7 @@ out vec4 FragmentColour;
 uniform sampler2D imageTexture;
 uniform int quantizationLevel = 8;
 uniform bool grayscale = false;
+uniform bool curve = false;
 
 float quantizeValue(float value, float originalLevel, float targetLevel) {
   value *= (pow(2, originalLevel) - 1);
@@ -21,7 +22,10 @@ vec4 quantizeColor(vec4 color, float originalLevel, float targetLevel) {
 }
 
 void main() {
-  //FragmentColour = vec4(1,0,0,1);
+  if (curve) {
+    FragmentColour = vec4(1,0,0,1);
+    return;
+  }
   FragmentColour = texture(imageTexture, TextureCoord);
   FragmentColour = quantizeColor(FragmentColour, 8, quantizationLevel);
   // FragmentColour.r *= 255;
