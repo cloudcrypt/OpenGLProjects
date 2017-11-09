@@ -89,7 +89,7 @@ int Program::run(int argc, const char ** argv)
 	//float scaleX = (float)width / (float)picWidth;
 
 	scaling = mat4();
-	scaling = scale(scaling, vec3(scaleX, scaleY, 0.0f));
+	scaling = scale(scaling, vec3(scaleX, scaleY, 1.0f));
 	shaderProgram.bind();
 	shaderProgram.setMat4("scaling", scaling);
 
@@ -225,7 +225,7 @@ void Program::setTransform()
 {
 	transform = mat4();
 	transform = translate(transform, vec3(translation, 0.0));
-	transform = scale(transform, vec3(scaleFactor, scaleFactor, 0.0f));
+	transform = scale(transform, vec3(scaleFactor, scaleFactor, 1.0f));
 	shaderProgram.bind();
 	shaderProgram.setMat4("transform", transform);
 }
@@ -256,7 +256,7 @@ void Program::sizeChange(int width, int height)
 	glViewport(0, 0, width, height);
 	
 	//glClear(GL_COLOR_BUFFER_BIT);
-	render(texture, picWidth, picHeight);
+	//render(texture, picWidth, picHeight);
 	//glfwSwapBuffers(window);
 }
 
@@ -357,11 +357,11 @@ void Program::mouseButtonInput(int button, int action, int mods)
 				//mat4 inverseScaling = glm::transpose(scaling);
 				//mat4 inverseTransform = transform;
 				mat4 transformMatrix = transform * scaling;
-				mat4 inverse = glm::affineInverse(transformMatrix);
+				mat4 inverse = glm::inverse(transformMatrix);
 				glm::vec4 vertice = glm::vec4(releaseLocation, 0.0, 1.0);
 				//releaseLocation = glm::inverse(transformMatrix) * glm::vec4(releaseLocation, 0.0, 1.0);
 
-				float larger = (picWidth >= picHeight) ? picWidth : picHeight;
+				/*float larger = (picWidth >= picHeight) ? picWidth : picHeight;
 				float scaleX = picWidth / larger;
 				float scaleY = picHeight / larger;
 				mat4 temp = mat4();
@@ -385,9 +385,10 @@ void Program::mouseButtonInput(int button, int action, int mods)
 
 				mat4 unScale = scaling;
 				unScale[0].x = 1 / unScale[0].x;
-				unScale[1].y = 1 / unScale[1].y;
+				unScale[1].y = 1 / unScale[1].y;*/
 
-				releaseLocation = unScale * unTransformScale * unTranslate * vertice;
+				//releaseLocation = unScale * unTransformScale * unTranslate * vertice;
+				releaseLocation = inverse * vertice;
 				cerr << "point at " << releaseLocation.x << " " << releaseLocation.y << endl;
 				points.push_back(releaseLocation.x);
 				points.push_back(releaseLocation.y);
