@@ -22,8 +22,10 @@ private:
 	bool live = true;
 	GLFWwindow* window = nullptr;
 	ShaderProgram shaderProgram;
+	ShaderProgram tessellationProgram;
 	VertexArray* va;
 	VertexArray* va2;
+	VertexArray* curve;
 	vector<float> controlPoints;
 	mat4 model;
 	mat4 transform;

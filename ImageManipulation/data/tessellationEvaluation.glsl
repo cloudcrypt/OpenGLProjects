@@ -1,15 +1,27 @@
 #version 410
 
-layout(location = 0) in vec2 position;
-layout(location = 1) in vec2 textureCoord;
+//uniform mat4 model;
+//uniform mat4 transform;
 
-out vec2 TextureCoord;
+vec2 bezier(float u, vec2 p0, vec2 p1, vec2 p2, vec2 p3)
+{
+	float B0 = (1.-u)*(1.-u)*(1.-u);
+	float B1 = 3.*u*(1.-u)*(1.-u);
+	float B2 = 3.*u*u*(1.-u);
+	float B3 = u*u*u;
 
-uniform mat4 model;
-uniform mat4 transform;
+	vec2 p = B0*p0 + B1*p1 + B2*p2 + B3*p3;
+	return p;
+} 
 
 void main() {
-  gl_Position = transform * model * vec4(position, 0.0, 1.0);
-  gl_PointSize = 5.0;
-  TextureCoord = vec2(textureCoord.x, 1.0f - textureCoord.y);
+  //gl_Position = transform * model * vec4(position, 0.0, 1.0);
+  float u = gl_TessCoord.x;
+  float v = gl_TessCoord.y;
+  vec2 p0 = vec2(gl_in[0].gl_Position);
+  vec2 p1 = vec2(gl_in[1].gl_Position);
+  vec2 p2 = vec2(gl_in[2].gl_Position);
+  vec2 p3 = vec2(gl_in[3].gl_Position);
+  vec4 pos = vec4(bezier(u, p0, p1, p2, p3), 0.0, 1.0);
+  gl_Position = pos;
 }

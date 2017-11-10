@@ -74,6 +74,9 @@ int Program::run(int argc, const char ** argv)
 	va2->setType(GL_POINTS);
 	glEnable(GL_PROGRAM_POINT_SIZE);
 
+	curve = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
+	curve->setType(GL_PATCHES);
+
 	//int picWidth, picHeight, channels;
 	string fileName = "sign.jpg";
 	float* pixels = stbi_loadf(fileName.c_str(), &picWidth, &picHeight, &channels, 0);
@@ -167,6 +170,8 @@ void Program::render(GLuint texture, int picWidth, int picHeight)
 	va->draw();
 	shaderProgram.setInt("curve", true);
 	va2->draw();
+	curve->tessellate();
+
 
 	glfwSwapBuffers(window);
 }
@@ -232,6 +237,21 @@ bool Program::initShaders()
 	if (!shaderProgram.link())
 		return terminate("Error linking shader program");
 
+	if (!tessellationProgram.attachShader("data/tessellationVertex.glsl", GL_VERTEX_SHADER))
+		return terminate("Error attaching tessellation vertex shader");
+
+	if (!tessellationProgram.attachShader("data/tessellationControl.glsl", GL_TESS_CONTROL_SHADER))
+		return terminate("Error attaching tessellation control shader");
+
+	if (!tessellationProgram.attachShader("data/tessellationEvaluation.glsl", GL_TESS_EVALUATION_SHADER))
+		return terminate("Error attaching tessellation evaluation shader");
+
+	if (!tessellationProgram.attachShader("data/tessellationFragment.glsl", GL_FRAGMENT_SHADER))
+		return terminate("Error attaching tessellation fragment shader");
+
+	if (!tessellationProgram.link())
+		return terminate("Error linking tessellation shader program");
+
 	return !OpenGL::error("Program::initShaders() assert");
 }
 
@@ -281,6 +301,8 @@ void Program::prepareControlPoints()
 			controlPoints.push_back(individualPoints.at(n));
 		}
 	}
+	curve = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
+	curve->setType(GL_PATCHES);
 }
 
 void Program::sizeCallback(GLFWwindow * window, int width, int height)

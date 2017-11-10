@@ -76,6 +76,25 @@ bool VertexArray::draw()
 	return !OpenGL::error("VertexArray::draw() assert");
 }
 
+bool VertexArray::tessellate()
+{
+	// Bind
+	glBindVertexArray(id);
+	if (OpenGL::error("glBindVertexArray"))
+		return false;
+
+	glPatchParameteri(GL_PATCH_VERTICES, 4);
+	// Draw
+	glDrawArrays(prim, 0, verts);
+	if (OpenGL::error("glDrawArrays"))
+		return false;
+
+	// Unbind
+	glBindVertexArray(0);
+
+	return !OpenGL::error("VertexArray::tessellate() assert");
+}
+
 bool VertexArray::setType(GLenum type)
 {
 	this->prim = type;
