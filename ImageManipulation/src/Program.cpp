@@ -174,6 +174,7 @@ void Program::render(GLuint texture, int picWidth, int picHeight)
 	curve->tessellate();
 
 
+
 	glfwSwapBuffers(window);
 }
 
@@ -301,9 +302,9 @@ void Program::prepareControlPoints()
 	controlPoints.push_back(last.y);
 	vector<float> individualPoints = controlPoints;
 	controlPoints.clear();
-	for (int i = 0; (i + 3) < (individualPoints.size() / 2); i++) {
+	for (int i = 0; ((i / 2) + 3) < (individualPoints.size() / 2); i+=2) {
 		for (int n = 0; n < 8; n++) {
-			controlPoints.push_back(individualPoints.at(n));
+			controlPoints.push_back(individualPoints.at(i + n));
 		}
 	}
 	curve = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
