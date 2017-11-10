@@ -69,9 +69,8 @@ int Program::run(int argc, const char ** argv)
 		-0.5f,  0.5f, 0.5f,  0.5f,
 		-0.5f, -0.5f, 0.5f, -0.5f
 	};*/
-	controlPoints = vector<float> { };
-	currentControlPoints = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
-	currentControlPoints->setType(GL_POINTS);
+	//controlPoints = vector<float> { };
+	setCurrentControlPoints();
 	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	//curve = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
@@ -332,6 +331,11 @@ void Program::prepareControlPoints()
 	curve->setType(GL_PATCHES);
 	curves.push_back(curve);
 	controlPoints.clear();
+	setCurrentControlPoints();
+}
+
+void Program::setCurrentControlPoints()
+{
 	currentControlPoints = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
 	currentControlPoints->setType(GL_POINTS);
 }
@@ -397,20 +401,17 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 		case GLFW_KEY_C:
 			closedMode = !closedMode;
 			break;
-		case GLFW_KEY_UP:
-			/*if (mode == Hilbert::Mode::Lines) {
-				float maxGridAmount = width / 16;
-				float maxNValue = sqrt(maxGridAmount);
-				if (n < maxNValue) {
-					n++;
-				}
-			} else {
-				float maxGridAmount = width / 8;
-				float maxNValue = sqrt(maxGridAmount);
-				if (n < (int)maxNValue) {
-					n++;
-				}
-			}*/
+		case GLFW_KEY_DELETE:
+		case GLFW_KEY_BACKSPACE:
+			if (controlPoints.size() > 1) {
+				controlPoints.pop_back();
+				controlPoints.pop_back();
+				setCurrentControlPoints();
+			}
+			else if (curves.size() > 0) {
+				curves.pop_back();
+				controlPointSets.pop_back();
+			}
 			break;
 		case GLFW_KEY_DOWN:
 			/*if (n > 1)
@@ -502,8 +503,7 @@ void Program::mouseButtonInput(int button, int action, int mods)
 				controlPoints.push_back(releaseLocation.x);
 				controlPoints.push_back(releaseLocation.y);
 
-				currentControlPoints = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
-				currentControlPoints->setType(GL_POINTS);
+				setCurrentControlPoints();
 			}
 			//translation = vec2(0.0, 0.0);
 			//setTransform();

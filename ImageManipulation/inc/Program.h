@@ -59,6 +59,7 @@ private:
 	void setQuantizationLevel(int level);
 	void setGrayscale();
 	void prepareControlPoints();
+	void setCurrentControlPoints();
 	static void sizeCallback(GLFWwindow* window, int width, int height);
 	void sizeChange(int width, int height);
 	static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
