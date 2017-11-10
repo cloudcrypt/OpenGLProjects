@@ -374,9 +374,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\Hilbert.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="inc\glm\detail\_features.hpp">
       <Filter>Header Files\GLM</Filter>
     </ClInclude>
@@ -826,12 +823,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\boilerplate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hilbert.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\OpenGL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -28,22 +28,6 @@ void main() {
   }
   FragmentColour = texture(imageTexture, TextureCoord);
   FragmentColour = quantizeColor(FragmentColour, 8, quantizationLevel);
-  // FragmentColour.r *= 255;
-  // FragmentColour.r /= 64;
-  // FragmentColour.r = floor(FragmentColour.r);
-  // FragmentColour.r /= 3;
-
-  // FragmentColour.g *= 255;
-  // FragmentColour.g /= 64;
-  // FragmentColour.g = floor(FragmentColour.g);
-  // FragmentColour.g /= 3;
-
-  // FragmentColour.b *= 255;
-  // FragmentColour.b /= 64;
-  // FragmentColour.b = floor(FragmentColour.b);
-  // FragmentColour.b /= 3;
-
-  //float gray = dot(FragmentColour.rgb, vec3(0.299, 0.587, 0.114));
   if (grayscale) {
     float gray = (0.299 * FragmentColour.r) + (0.587 * FragmentColour.g)  + (0.114 * FragmentColour.b);
     FragmentColour = vec4(gray, gray, gray, 1);

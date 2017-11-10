@@ -1,7 +1,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
-//#include "Hilbert.h"
 #include "ShaderProgram.h"
 #include "VertexArray.h"
 #include "glm/glm.hpp"
@@ -14,24 +13,16 @@ using glm::vec3;
 class Program
 {
 private:
-
-	/*int n = 1;
-	Hilbert::Mode mode = Hilbert::Mode::Rectangles;
-	Hilbert h;*/
-
 	bool live = true;
 	GLFWwindow* window = nullptr;
 	ShaderProgram shaderProgram;
 	ShaderProgram tessellationProgram;
 	VertexArray* va;
 	VertexArray* currentControlPoints;
-	//VertexArray* curve;
 	vector<float> controlPoints;
 	vector<float> readyPoints;
-
 	vector<VertexArray*> curves;
 	vector<VertexArray*> controlPointSets;
-
 	mat4 model;
 	mat4 transform;
 	char *windowName = "ImageManipulation";
@@ -50,7 +41,7 @@ private:
 	vec2 releaseLocation;
 	vec2 previousTranslation = vec2(0.0, 0.0);
 	vec2 translation = vec2(0.0, 0.0);
-	void render(GLuint texture, int w, int h);
+	void render();
 	bool initGLFW();
 	bool initGLEW();
 	bool initShaders();
@@ -58,7 +49,7 @@ private:
 	void setTransform();
 	void setQuantizationLevel(int level);
 	void setGrayscale();
-	void prepareControlPoints();
+	void renderCurve();
 	void setCurrentControlPoints();
 	static void sizeCallback(GLFWwindow* window, int width, int height);
 	void sizeChange(int width, int height);

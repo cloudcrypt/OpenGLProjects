@@ -8,15 +8,6 @@
 using std::cerr;
 using std::endl;
 
-
-ShaderProgram::ShaderProgram()
-{
-}
-
-ShaderProgram::~ShaderProgram()
-{
-}
-
 bool ShaderProgram::attachShader(string path, GLenum type)
 {
 	if (id <= 0) {

@@ -4,7 +4,6 @@
 #include <GL/glew.h>
 
 #include <cmath>
-//#include "Hilbert.h"
 #include "VertexArray.h"
 
 #define STBI_FAILURE_USERMSG
@@ -14,7 +13,6 @@
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/matrix_inverse.hpp"
-//#include "glm/gtx/transform.hpp"
 
 using glm::mat4;
 using glm::vec3;
@@ -45,38 +43,9 @@ int Program::run(int argc, const char ** argv)
 	}, 2, 6, true);
 	va->setType(GL_TRIANGLES);
 
-	/*va = new VertexArray(vector<float> { 
-		-0.5f, -0.5f,
-		 0.5f,  0.5f,
-		-0.5f,  0.5f,
-		-0.5f, -0.5f,
-		 0.5f, -0.5f,
-		 0.5f,  0.5f
-	}, 2, 6, false);
-	va->setType(GL_TRIANGLES);*/
-
-
-	/*vector<float> points {
-		-0.5f,  0.5f, 0.5f,  0.5f,
-		-0.5f, -0.5f, 0.5f, -0.5f
-	};*/
-	/*va2 = new VertexArray(vector<float> { 
-		-0.5f,  0.5f, 0.5f,  0.5f,
-		-0.5f, -0.5f, 0.5f, -0.5f
-	}, 2, 4, false);
-	va2->setType(GL_POINTS);*/
-	/*controlPoints = vector<float> {
-		-0.5f,  0.5f, 0.5f,  0.5f,
-		-0.5f, -0.5f, 0.5f, -0.5f
-	};*/
-	//controlPoints = vector<float> { };
 	setCurrentControlPoints();
 	glEnable(GL_PROGRAM_POINT_SIZE);
 
-	//curve = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
-	//curve->setType(GL_PATCHES);
-
-	//int picWidth, picHeight, channels;
 	string fileName = "sign.jpg";
 	float* pixels = stbi_loadf(fileName.c_str(), &picWidth, &picHeight, &channels, 0);
 	if (pixels == nullptr) {
@@ -84,7 +53,6 @@ int Program::run(int argc, const char ** argv)
 		return -1;
 	}
 
-	//GLuint texture;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, picWidth, picHeight, 0, GL_RGB, GL_FLOAT, pixels);
@@ -92,33 +60,18 @@ int Program::run(int argc, const char ** argv)
 	stbi_image_free(pixels);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	// Create transform matrix
+	// Create aspect ratio scaling
 	float larger = (picWidth >= picHeight) ? picWidth : picHeight;
 	float scaleX = picWidth / larger;
 	float scaleY = picHeight / larger;
 
-	/*float windowAspectRatio = (float)width / (float)height;
-	float imageAspectRatio = (float)picWidth / (float)picHeight;
-	float scaleValue = imageAspectRatio / windowAspectRatio;*/
-
-	//float scaleX = (float)width / (float)picWidth;
-
-	//scaling = mat4();
-	//scaling = scale(scaling, vec3(scaleX, scaleY, 1.0f));
 	aspectRatioScaling = vec3(scaleX, scaleY, 1.0f);
 
 	setModel();
-	//shaderProgram.bind();
-	//shaderProgram.setMat4("scaling", scaling);
-
-	/*mat4 scaling;
-	scaling = scale(scaling, vec3(scaleFactor, scaleFactor, 0.0f));
-	shaderProgram.bind();
-	shaderProgram.setMat4("scaling", scaling);*/
 	setTransform();
 
 	while (live) {
-		render(texture, picWidth, picHeight);
+		render();
 		glfwPollEvents();
 		if (glfwWindowShouldClose(window))
 			live = false;
@@ -129,39 +82,10 @@ int Program::run(int argc, const char ** argv)
 	return 0;
 }
 
-void Program::render(GLuint texture, int picWidth, int picHeight)
+void Program::render()
 {
-	//h.generate(n, mode);
-	////VertexArray va(vector<float> { -1.0f, -1.0f, 1.0f, -1.0f, 0.0f, 1.0f }, 2);
-
-	//glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	//float larger = (picWidth >= picHeight) ? picWidth : picHeight;
-	//float scaleX = picWidth / larger;
-	//float scaleY = picHeight / larger;
-	
-	//float scaleX = (float)width / (float)picWidth;
-	
-	//float aspectRatio = (float)picWidth / (float)picHeight;
-	//float newHeight = (float)width / aspectRatio;
-	//float scaleY = newHeight / (float)picHeight;
-	/*mat4 trans;
-	if (scaleY > 1.0f) {
-		scaleY = 1.0f;
-		float newWidth = aspectRatio * (float)height;
-		scaleX = (float)picWidth / newWidth;
-		trans = scale(trans, vec3(scaleX, 1.0f, 0.0f));
-	}
-	else {
-		trans = scale(trans, vec3(1.0f, scaleY, 0.0f));
-	}*/
-
-	/*mat4 trans;
-	trans = scale(trans, vec3(1.0f, scaleX, 0.0f));
-	shaderProgram.bind();
-	shaderProgram.setMat4("transform", trans);*/
 
 	glBindTexture(GL_TEXTURE_2D, texture);
 	shaderProgram.bind();
@@ -174,10 +98,8 @@ void Program::render(GLuint texture, int picWidth, int picHeight)
 	}
 	tessellationProgram.bind();
 	for (VertexArray *curve : curves) {
-		curve->tessellate();
+		curve->draw();
 	}
-
-
 
 	glfwSwapBuffers(window);
 }
@@ -210,9 +132,8 @@ bool Program::initGLFW()
 		cerr << description << endl;
 	});
 
-	//glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 1);
 	glfwSetWindowUserPointer(window, this);
-	// Set up a callbacks
+	// Set up all callbacks
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetWindowSizeCallback(window, sizeCallback);
 	glfwSetScrollCallback(window, scrollCallback);
@@ -296,7 +217,7 @@ void Program::setGrayscale()
 	shaderProgram.setInt("grayscale", grayscale);
 }
 
-void Program::prepareControlPoints()
+void Program::renderCurve()
 {
 	VertexArray *controlPointSet = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
 	controlPointSet->setType(GL_POINTS);
@@ -347,29 +268,17 @@ void Program::sizeCallback(GLFWwindow * window, int width, int height)
 
 void Program::sizeChange(int width, int height)
 {
-	//glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-
 	reverseTranslation = vec3(-(width - this->originalWidth), -(height - this->originalHeight), 0.0);
 	reverseTranslation.x *= (2 / (double)width);
 	reverseTranslation.y *= (2 / (double)height);
-	//reverseTranslation.x *= 0.75;
-	//reverseTranslation.y *= 0.75;
-	
-	//scaling = mat4();
-	//scaling = translate(scaling, reverseTranslation);
-	//scaling = scale(scaling, vec3((double)1 / ((double)width / (double)(this->originalWidth)), (double)1 / ((double)height / (double)(this->originalHeight)), 1.0f));
+
 	reverseScaling = vec3((double)1 / ((double)width / (double)(this->originalWidth)), (double)1 / ((double)height / (double)(this->originalHeight)), 1.0f);
 
 	setModel();
-	//shaderProgram.bind();
-	//shaderProgram.setMat4("scaling", scaling);
 
 	glViewport(0, 0, width, height);
-	render(texture, picWidth, picHeight);
+	render();
 	
-	//glClear(GL_COLOR_BUFFER_BIT);
-	//render(texture, picWidth, picHeight);
-	//glfwSwapBuffers(window);
 	this->width = width;
 	this->height = height;
 }
@@ -396,7 +305,7 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 			setGrayscale();
 			break;
 		case GLFW_KEY_R:
-			prepareControlPoints();
+			renderCurve();
 			break;
 		case GLFW_KEY_C:
 			closedMode = !closedMode;
@@ -412,12 +321,6 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 				curves.pop_back();
 				controlPointSets.pop_back();
 			}
-			break;
-		case GLFW_KEY_DOWN:
-			/*if (n > 1)
-				n--;*/
-			break;
-		case GLFW_KEY_M:
 			break;
 	}
 }
@@ -447,7 +350,6 @@ void Program::mouseButtonCallback(GLFWwindow * window, int button, int action, i
 void Program::mouseButtonInput(int button, int action, int mods)
 {
 	if (button == GLFW_MOUSE_BUTTON_LEFT) {
-		//int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 		if (action == GLFW_PRESS) {
 			buttonPressed = true;
 			double xPos, yPos;
@@ -463,50 +365,14 @@ void Program::mouseButtonInput(int button, int action, int mods)
 			if (releaseLocation == pressOrigin) {
 				releaseLocation.x = (releaseLocation.x / (width / (float)2)) - 1.0;
 				releaseLocation.y = ((height - releaseLocation.y) / (height / (float)2)) - 1.0;
-				cerr << "click at " << releaseLocation.x << " " << releaseLocation.y << endl;
-				//mat4 inverseScaling = glm::transpose(scaling);
-				//mat4 inverseTransform = transform;
 				mat4 transformMatrix = transform * model;
 				mat4 inverse = glm::inverse(transformMatrix);
 				glm::vec4 vertice = glm::vec4(releaseLocation, 0.0, 1.0);
-				//releaseLocation = glm::inverse(transformMatrix) * glm::vec4(releaseLocation, 0.0, 1.0);
-
-				/*float larger = (picWidth >= picHeight) ? picWidth : picHeight;
-				float scaleX = picWidth / larger;
-				float scaleY = picHeight / larger;
-				mat4 temp = mat4();
-				temp = scale(temp, vec3(1/scaleX, 1/scaleY, 0.0f));
-				mat4 original = mat4();
-				original = scale(original, vec3(scaleX, scaleY, 0.0f));
-
-				mat4 unTranslate = transform;
-				unTranslate[0].x = 1;
-				unTranslate[1].y = 1;
-				unTranslate[3].x = -unTranslate[3].x;
-				unTranslate[3].y = -unTranslate[3].y;
-
-				mat4 unTransformScale = transform;
-				unTransformScale[0].x = 1 / unTransformScale[0].x;
-				unTransformScale[1].y = 1 / unTransformScale[1].y;
-				unTransformScale[3].x = 0;
-				unTransformScale[3].y = 0;
-
-				mat4 inverseTransform = glm::affineInverse(transform);
-
-				mat4 unScale = scaling;
-				unScale[0].x = 1 / unScale[0].x;
-				unScale[1].y = 1 / unScale[1].y;*/
-
-				//releaseLocation = unScale * unTransformScale * unTranslate * vertice;
 				releaseLocation = inverse * vertice;
-				cerr << "point at " << releaseLocation.x << " " << releaseLocation.y << endl;
 				controlPoints.push_back(releaseLocation.x);
 				controlPoints.push_back(releaseLocation.y);
-
 				setCurrentControlPoints();
 			}
-			//translation = vec2(0.0, 0.0);
-			//setTransform();
 		}
 	}
 }
@@ -525,7 +391,6 @@ void Program::cursorPositionChange(double xPos, double yPos)
 		translation.y *= (2 / (float)height);
 		translation = previousTranslation + translation;
 		setTransform();
-		//cerr << translation.x << " " << translation.y << endl;
 	}
 }
 

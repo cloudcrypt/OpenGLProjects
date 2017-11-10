@@ -399,7 +399,6 @@ xcopy /s /y /d "$(ProjectDir)data" "$(OutDir)data\"</Command>
     <ClInclude Include="inc\glm\vec3.hpp" />
     <ClInclude Include="inc\glm\vec4.hpp" />
     <ClInclude Include="inc\glm\vector_relational.hpp" />
-    <ClInclude Include="inc\Hilbert.h" />
     <ClInclude Include="inc\OpenGL.h" />
     <ClInclude Include="inc\Program.h" />
     <ClInclude Include="inc\stb_image.h" />
@@ -410,8 +409,6 @@ xcopy /s /y /d "$(ProjectDir)data" "$(OutDir)data\"</Command>
     <ClCompile Include="src\ShaderProgram.cpp" />
     <ClCompile Include="src\Program.cpp" />
     <ClCompile Include="src\OpenGL.cpp" />
-    <ClCompile Include="src\boilerplate.cpp" />
-    <ClCompile Include="src\Hilbert.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

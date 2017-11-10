@@ -53,9 +53,6 @@ VertexArray::VertexArray(vector<GLfloat> data, GLuint dim, GLuint verts, bool en
 	// Unbind ourselves
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-
-	//verts = data.size() / dim;
-	//verts = 3;
 }
 
 bool VertexArray::draw()
@@ -64,6 +61,10 @@ bool VertexArray::draw()
 	glBindVertexArray(id);
 	if (OpenGL::error("glBindVertexArray"))
 		return false;
+
+	if (prim == GL_PATCHES) {
+		glPatchParameteri(GL_PATCH_VERTICES, 4);
+	}
 
 	// Draw
 	glDrawArrays(prim, 0, verts);
@@ -74,25 +75,6 @@ bool VertexArray::draw()
 	glBindVertexArray(0);
 
 	return !OpenGL::error("VertexArray::draw() assert");
-}
-
-bool VertexArray::tessellate()
-{
-	// Bind
-	glBindVertexArray(id);
-	if (OpenGL::error("glBindVertexArray"))
-		return false;
-
-	glPatchParameteri(GL_PATCH_VERTICES, 4);
-	// Draw
-	glDrawArrays(prim, 0, verts);
-	if (OpenGL::error("glDrawArrays"))
-		return false;
-
-	// Unbind
-	glBindVertexArray(0);
-
-	return !OpenGL::error("VertexArray::tessellate() assert");
 }
 
 bool VertexArray::setType(GLenum type)

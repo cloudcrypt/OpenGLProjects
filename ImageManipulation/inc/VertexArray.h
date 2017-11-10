@@ -16,7 +16,6 @@ private:
 public:
 	VertexArray(vector<GLfloat> data, GLuint dim, GLuint verts, bool enableTextureCoords);
 	bool draw();
-	bool tessellate();
 	bool setType(GLenum type);
 };
 

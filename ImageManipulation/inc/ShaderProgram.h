@@ -10,11 +10,10 @@ using glm::mat4;
 class ShaderProgram
 {
 public:
-//private:
+private:
 	GLint id = -1;
-//public:
-	ShaderProgram();
-	~ShaderProgram();
+public:
+	ShaderProgram() { }
 	bool attachShader(string fileName, GLenum type);
 	bool link();
 	bool setInt(string variable, GLint value);
