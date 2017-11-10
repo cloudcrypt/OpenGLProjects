@@ -314,6 +314,20 @@ void Program::prepareControlPoints()
 			expandedPoints.push_back(controlPoints.at(i + n));
 		}
 	}
+	if (closedMode && ((controlPoints.size() / 2) > 4)) {
+		vector<float> closingSegment;
+		closingSegment.push_back(expandedPoints.at(expandedPoints.size() - 6));
+		closingSegment.push_back(expandedPoints.at(expandedPoints.size() - 5));
+		closingSegment.push_back(expandedPoints.at(expandedPoints.size() - 4));
+		closingSegment.push_back(expandedPoints.at(expandedPoints.size() - 3));
+		closingSegment.push_back(expandedPoints.at(2));
+		closingSegment.push_back(expandedPoints.at(3));
+		closingSegment.push_back(expandedPoints.at(4));
+		closingSegment.push_back(expandedPoints.at(5));
+		for (float point : closingSegment) {
+			expandedPoints.push_back(point);
+		}
+	}
 	VertexArray *curve = new VertexArray(expandedPoints, 2, expandedPoints.size() / 2, false);
 	curve->setType(GL_PATCHES);
 	curves.push_back(curve);
@@ -381,7 +395,7 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 			prepareControlPoints();
 			break;
 		case GLFW_KEY_C:
-			curveMode = !curveMode;
+			closedMode = !closedMode;
 			break;
 		case GLFW_KEY_UP:
 			/*if (mode == Hilbert::Mode::Lines) {

@@ -42,7 +42,7 @@ private:
 	float scaleFactor = 1.0f;
 	bool buttonPressed = false;
 	bool grayscale = false;
-	bool curveMode = false;
+	bool closedMode = false;
 	vec3 reverseTranslation = vec3(0.0, 0.0, 0.0);
 	vec3 reverseScaling = vec3(1.0, 1.0, 1.0);
 	vec3 aspectRatioScaling = vec3(1.0, 1.0, 1.0);
