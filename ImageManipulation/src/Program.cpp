@@ -70,12 +70,12 @@ int Program::run(int argc, const char ** argv)
 		-0.5f, -0.5f, 0.5f, -0.5f
 	};*/
 	controlPoints = vector<float> { };
-	va2 = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
-	va2->setType(GL_POINTS);
+	currentControlPoints = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
+	currentControlPoints->setType(GL_POINTS);
 	glEnable(GL_PROGRAM_POINT_SIZE);
 
-	curve = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
-	curve->setType(GL_PATCHES);
+	//curve = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
+	//curve->setType(GL_PATCHES);
 
 	//int picWidth, picHeight, channels;
 	string fileName = "sign.jpg";
@@ -169,9 +169,14 @@ void Program::render(GLuint texture, int picWidth, int picHeight)
 	shaderProgram.setInt("curve", false);
 	va->draw();
 	shaderProgram.setInt("curve", true);
-	va2->draw();
+	currentControlPoints->draw();
+	for (VertexArray *controlPointSet : controlPointSets) {
+		controlPointSet->draw();
+	}
 	tessellationProgram.bind();
-	curve->tessellate();
+	for (VertexArray *curve : curves) {
+		curve->tessellate();
+	}
 
 
 
@@ -294,21 +299,27 @@ void Program::setGrayscale()
 
 void Program::prepareControlPoints()
 {
+	VertexArray *controlPointSet = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
+	controlPointSet->setType(GL_POINTS);
+	controlPointSets.push_back(controlPointSet);
 	vec2 first = vec2(controlPoints.at(0), controlPoints.at(1));
 	controlPoints.insert(controlPoints.begin(), first.y);
 	controlPoints.insert(controlPoints.begin(), first.x);
 	vec2 last = vec2(controlPoints.at(controlPoints.size() - 2), controlPoints.at(controlPoints.size() - 1));
 	controlPoints.push_back(last.x);
 	controlPoints.push_back(last.y);
-	vector<float> individualPoints = controlPoints;
-	controlPoints.clear();
-	for (int i = 0; ((i / 2) + 3) < (individualPoints.size() / 2); i+=2) {
+	vector<float> expandedPoints;
+	for (int i = 0; ((i / 2) + 3) < (controlPoints.size() / 2); i+=2) {
 		for (int n = 0; n < 8; n++) {
-			controlPoints.push_back(individualPoints.at(i + n));
+			expandedPoints.push_back(controlPoints.at(i + n));
 		}
 	}
-	curve = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
+	VertexArray *curve = new VertexArray(expandedPoints, 2, expandedPoints.size() / 2, false);
 	curve->setType(GL_PATCHES);
+	curves.push_back(curve);
+	controlPoints.clear();
+	currentControlPoints = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
+	currentControlPoints->setType(GL_POINTS);
 }
 
 void Program::sizeCallback(GLFWwindow * window, int width, int height)
@@ -477,8 +488,8 @@ void Program::mouseButtonInput(int button, int action, int mods)
 				controlPoints.push_back(releaseLocation.x);
 				controlPoints.push_back(releaseLocation.y);
 
-				va2 = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
-				va2->setType(GL_POINTS);
+				currentControlPoints = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
+				currentControlPoints->setType(GL_POINTS);
 			}
 			//translation = vec2(0.0, 0.0);
 			//setTransform();

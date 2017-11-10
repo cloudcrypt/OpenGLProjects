@@ -24,13 +24,13 @@ private:
 	ShaderProgram shaderProgram;
 	ShaderProgram tessellationProgram;
 	VertexArray* va;
-	VertexArray* va2;
-	VertexArray* curve;
+	VertexArray* currentControlPoints;
+	//VertexArray* curve;
 	vector<float> controlPoints;
 	vector<float> readyPoints;
 
 	vector<VertexArray*> curves;
-	vector<vector<float>> controlPointSets;
+	vector<VertexArray*> controlPointSets;
 
 	mat4 model;
 	mat4 transform;
