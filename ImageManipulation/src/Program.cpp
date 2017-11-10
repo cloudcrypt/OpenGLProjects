@@ -186,9 +186,6 @@ bool Program::initShaders()
 	if (!tessellationProgram.attachShader("data/tessellationEvaluation.glsl", GL_TESS_EVALUATION_SHADER))
 		return terminate("Error attaching tessellation evaluation shader");
 
-	if (!tessellationProgram.attachShader("data/geometry.glsl", GL_GEOMETRY_SHADER))
-		return terminate("Error attaching geometry shader");
-
 	if (!tessellationProgram.link())
 		return terminate("Error linking tessellation shader program");
 
