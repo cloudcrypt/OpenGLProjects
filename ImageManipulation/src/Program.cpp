@@ -264,6 +264,8 @@ void Program::setModel()
 	model = scale(model, aspectRatioScaling);
 	shaderProgram.bind();
 	shaderProgram.setMat4("model", model);
+	tessellationProgram.bind();
+	tessellationProgram.setMat4("model", model);
 }
 
 void Program::setTransform()
@@ -273,6 +275,8 @@ void Program::setTransform()
 	transform = scale(transform, vec3(scaleFactor, scaleFactor, 1.0f));
 	shaderProgram.bind();
 	shaderProgram.setMat4("transform", transform);
+	tessellationProgram.bind();
+	tessellationProgram.setMat4("transform", transform);
 }
 
 void Program::setQuantizationLevel(int level)
