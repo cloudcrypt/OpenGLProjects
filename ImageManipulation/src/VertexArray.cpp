@@ -1,3 +1,13 @@
+// ==========================================================================
+// CPSC 453 Assignment #2: Image Manipulation
+// Daniel Dastoor
+// VertexArray.cpp
+// Class to create and draw vertex array objects.
+//
+// Author: Daniel Dastoor, based on code by Haysn Hornbeck.
+// Date:   November 2017
+// ==========================================================================
+
 #include "VertexArray.h"
 #include <GL/glew.h>
 #include "OpenGL.h"

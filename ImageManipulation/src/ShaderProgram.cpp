@@ -1,3 +1,13 @@
+// ==========================================================================
+// CPSC 453 Assignment #2: Image Manipulation
+// Daniel Dastoor
+// ShaderProgram.cpp
+// Class to load and compile GLSL shaders
+//
+// Author: Daniel Dastoor, based on code by Haysn Hornbeck
+// Date:   November 2017
+// ==========================================================================
+
 #include "ShaderProgram.h"
 #include "OpenGL.h"
 #include <fstream>

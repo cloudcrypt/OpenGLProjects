@@ -1,3 +1,13 @@
+// ==========================================================================
+// CPSC 453 Assignment #2: Image Manipulation
+// Daniel Dastoor
+// OpenGL.cpp
+// Class to query and display OpenGl error messages
+//
+// Author: Daniel Dastoor, based on code by Haysn Hornbeck
+// Date:   November 2017
+// ==========================================================================
+
 #include "OpenGL.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>

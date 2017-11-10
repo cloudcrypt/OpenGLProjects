@@ -1,3 +1,13 @@
+// ==========================================================================
+// CPSC 453 Assignment #2: Image Manipulation
+// Daniel Dastoor
+// Program.cpp
+// Class to display and manipulate images and catmull-rom splines.
+//
+// Author: Daniel Dastoor
+// Date:   November 2017
+// ==========================================================================
+
 #include "Program.h"
 #include "OpenGL.h"
 #include <iostream>
