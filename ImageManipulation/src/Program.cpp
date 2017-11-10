@@ -241,14 +241,14 @@ bool Program::initShaders()
 	if (!tessellationProgram.attachShader("data/tessellationVertex.glsl", GL_VERTEX_SHADER))
 		return terminate("Error attaching tessellation vertex shader");
 
+	if (!tessellationProgram.attachShader("data/tessellationFragment.glsl", GL_FRAGMENT_SHADER))
+		return terminate("Error attaching tessellation fragment shader");
+
 	if (!tessellationProgram.attachShader("data/tessellationControl.glsl", GL_TESS_CONTROL_SHADER))
 		return terminate("Error attaching tessellation control shader");
 
 	if (!tessellationProgram.attachShader("data/tessellationEvaluation.glsl", GL_TESS_EVALUATION_SHADER))
 		return terminate("Error attaching tessellation evaluation shader");
-
-	if (!tessellationProgram.attachShader("data/tessellationFragment.glsl", GL_FRAGMENT_SHADER))
-		return terminate("Error attaching tessellation fragment shader");
 
 	if (!tessellationProgram.link())
 		return terminate("Error linking tessellation shader program");

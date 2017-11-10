@@ -366,6 +366,12 @@
     <None Include="data\tessellationEvaluation.glsl">
       <Filter>Shader Files</Filter>
     </None>
+    <None Include="data\tessellationFragment.glsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="data\tessellationVertex.glsl">
+      <Filter>Shader Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Hilbert.h">
