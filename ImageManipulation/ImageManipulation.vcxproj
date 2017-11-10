@@ -131,6 +131,8 @@ xcopy /s /y /d "$(ProjectDir)data" "$(OutDir)data\"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="data\fragment.glsl" />
+    <None Include="data\tessellationControl.glsl" />
+    <None Include="data\tessellationEvaluation.glsl" />
     <None Include="data\vertex.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </DeploymentContent>

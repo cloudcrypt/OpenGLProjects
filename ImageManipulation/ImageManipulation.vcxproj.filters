@@ -360,6 +360,12 @@
     <None Include="data\vertex.glsl">
       <Filter>Shader Files</Filter>
     </None>
+    <None Include="data\tessellationControl.glsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="data\tessellationEvaluation.glsl">
+      <Filter>Shader Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Hilbert.h">

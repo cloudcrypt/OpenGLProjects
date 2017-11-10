@@ -65,10 +65,11 @@ int Program::run(int argc, const char ** argv)
 		-0.5f, -0.5f, 0.5f, -0.5f
 	}, 2, 4, false);
 	va2->setType(GL_POINTS);*/
-	controlPoints = vector<float> {
+	/*controlPoints = vector<float> {
 		-0.5f,  0.5f, 0.5f,  0.5f,
 		-0.5f, -0.5f, 0.5f, -0.5f
-	};
+	};*/
+	controlPoints = vector<float> { };
 	va2 = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
 	va2->setType(GL_POINTS);
 	glEnable(GL_PROGRAM_POINT_SIZE);
@@ -267,6 +268,19 @@ void Program::setGrayscale()
 
 void Program::prepareControlPoints()
 {
+	vec2 first = vec2(controlPoints.at(0), controlPoints.at(1));
+	controlPoints.insert(controlPoints.begin(), first.y);
+	controlPoints.insert(controlPoints.begin(), first.x);
+	vec2 last = vec2(controlPoints.at(controlPoints.size() - 2), controlPoints.at(controlPoints.size() - 1));
+	controlPoints.push_back(last.x);
+	controlPoints.push_back(last.y);
+	vector<float> individualPoints = controlPoints;
+	controlPoints.clear();
+	for (int i = 0; (i + 3) < (individualPoints.size() / 2); i++) {
+		for (int n = 0; n < 8; n++) {
+			controlPoints.push_back(individualPoints.at(n));
+		}
+	}
 }
 
 void Program::sizeCallback(GLFWwindow * window, int width, int height)
@@ -325,6 +339,7 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 			setGrayscale();
 			break;
 		case GLFW_KEY_R:
+			prepareControlPoints();
 			break;
 		case GLFW_KEY_C:
 			curveMode = !curveMode;
