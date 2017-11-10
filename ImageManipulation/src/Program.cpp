@@ -170,6 +170,7 @@ void Program::render(GLuint texture, int picWidth, int picHeight)
 	va->draw();
 	shaderProgram.setInt("curve", true);
 	va2->draw();
+	tessellationProgram.bind();
 	curve->tessellate();
 
 
