@@ -423,18 +423,14 @@ void Program::mouseButtonInput(int button, int action, int mods)
 	if (button == GLFW_MOUSE_BUTTON_LEFT) {
 		//int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 		if (action == GLFW_PRESS) {
-			if (!curveMode) {
-				buttonPressed = true;
-			}
+			buttonPressed = true;
 			double xPos, yPos;
 			glfwGetCursorPos(window, &xPos, &yPos);
 			pressOrigin = vec2(xPos, yPos);
 		}
 		else if (action == GLFW_RELEASE) {
-			if (!curveMode) {
-				buttonPressed = false;
-				previousTranslation = translation;
-			}
+			buttonPressed = false;
+			previousTranslation = translation;
 			double xPos, yPos;
 			glfwGetCursorPos(window, &xPos, &yPos);
 			releaseLocation = vec2(xPos, yPos);

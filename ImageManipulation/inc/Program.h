@@ -28,6 +28,10 @@ private:
 	VertexArray* curve;
 	vector<float> controlPoints;
 	vector<float> readyPoints;
+
+	vector<VertexArray*> curves;
+	vector<vector<float>> controlPointSets;
+
 	mat4 model;
 	mat4 transform;
 	char *windowName = "ImageManipulation";
