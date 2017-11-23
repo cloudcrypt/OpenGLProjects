@@ -26,12 +26,12 @@ public:
 	bool attachShader(string fileName, GLenum type);
 	bool link();
 
-	bool setInt(string variable, GLint value);
-	bool setFloat(string variable, GLfloat value);
-	bool setVec2(string variable, GLfloat value1, GLfloat value2);
-	bool setMat4(string variable, mat4 mat);
+	bool setInt(string variable, GLint value) const;
+	bool setFloat(string variable, GLfloat value) const;
+	bool setVec2(string variable, GLfloat value1, GLfloat value2) const;
+	bool setMat4(string variable, mat4 mat) const;
 
-	bool bind();
+	bool bind() const;
 	static void unbind();
 };
 

@@ -13,6 +13,7 @@
 #include <string>
 #include "ShaderProgram.h"
 #include "VertexArray.h"
+#include "Camera.h"
 #include "glm/glm.hpp"
 
 using std::endl;
@@ -37,6 +38,8 @@ private:
 
 	vector<VertexArray*> curves;
 	vector<VertexArray*> controlPointSets;
+
+	Camera *camera;
 
 	mat4 model;
 	mat4 view;

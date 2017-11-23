@@ -92,7 +92,7 @@ bool ShaderProgram::link()
 	return true;
 }
 
-bool ShaderProgram::setInt(string variable, GLint value)
+bool ShaderProgram::setInt(string variable, GLint value) const
 {
 	// Get the uniform's location, if possible
 	GLint location = glGetUniformLocation(id, variable.c_str());
@@ -103,7 +103,7 @@ bool ShaderProgram::setInt(string variable, GLint value)
 	return true;
 }
 
-bool ShaderProgram::setFloat(string variable, GLfloat value)
+bool ShaderProgram::setFloat(string variable, GLfloat value) const
 {
 	// Get the uniform's location, if possible
 	GLint location = glGetUniformLocation(id, variable.c_str());
@@ -114,7 +114,7 @@ bool ShaderProgram::setFloat(string variable, GLfloat value)
 	return true;
 }
 
-bool ShaderProgram::setVec2(string variable, GLfloat value1, GLfloat value2)
+bool ShaderProgram::setVec2(string variable, GLfloat value1, GLfloat value2) const
 {
 	// Get the uniform's location, if possible
 	GLint location = glGetUniformLocation(id, variable.c_str());
@@ -125,7 +125,7 @@ bool ShaderProgram::setVec2(string variable, GLfloat value1, GLfloat value2)
 	return true;
 }
 
-bool ShaderProgram::setMat4(string variable, mat4 mat)
+bool ShaderProgram::setMat4(string variable, mat4 mat) const
 {
 	// Get the uniform's location if possible
 	GLint location = glGetUniformLocation(id, variable.c_str());
@@ -136,7 +136,7 @@ bool ShaderProgram::setMat4(string variable, mat4 mat)
 	return true;
 }
 
-bool ShaderProgram::bind()
+bool ShaderProgram::bind() const
 {
 	glUseProgram(id);
 	if (OpenGL::error("glUseProgram"))

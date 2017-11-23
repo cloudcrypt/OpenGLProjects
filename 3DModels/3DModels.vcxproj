@@ -255,6 +255,7 @@ xcopy /s /y /d "$(ProjectDir)data" "$(OutDir)data\"</Command>
     <None Include="inc\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\Camera.h" />
     <ClInclude Include="inc\glm\common.hpp" />
     <ClInclude Include="inc\glm\detail\func_common.hpp" />
     <ClInclude Include="inc\glm\detail\func_exponential.hpp" />
@@ -406,6 +407,7 @@ xcopy /s /y /d "$(ProjectDir)data" "$(OutDir)data\"</Command>
     <ClInclude Include="inc\ShaderProgram.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
     <ClCompile Include="src\Program.cpp" />
     <ClCompile Include="src\OpenGL.cpp" />

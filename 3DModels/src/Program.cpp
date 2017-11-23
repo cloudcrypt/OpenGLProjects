@@ -13,6 +13,8 @@
 #include <iostream>
 #include <GL/glew.h>
 
+#include "Camera.h"
+
 #include <cmath>
 #include "VertexArray.h"
 
@@ -43,7 +45,7 @@ int Program::run(int argc, const char ** argv)
 	if (!initGLFW() || !initGLEW() || !initShaders())
 		return -1;
 	
-	/*vector<float> vertices = {
+	vector<float> vertices = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
 		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -85,13 +87,13 @@ int Program::run(int argc, const char ** argv)
 		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-	};*/
+	};
 		/*1.000000, 0.003296, -1.000000, 0.0f, 0.0f,
 		1.000000, 0.003296, 1.000000, 0.0f, 0.0f,
 		-1.000000, 0.003296, 1.000000, 0.0f, 0.0f,
 		-1.000000, 0.003296, -1.000000, 0.0f, 0.0f,
 		-0.000000, 1.000000, 0.000000, 0.0f, 0.0f*/
-	vector<float> vertices = {
+	/*vector<float> vertices = {
 		 1.000000f,  0.003296f,  1.000000f, 0.0f, 0.0f,
 		-1.000000f,  0.003296f, -1.000000f, 0.0f, 0.0f,
 		 1.000000f,  0.003296f, -1.000000f, 0.0f, 0.0f,
@@ -115,8 +117,8 @@ int Program::run(int argc, const char ** argv)
 		 1.000000f,  0.003296f,  1.000000f, 0.0f, 0.0f,
 		-1.000000f,  0.003296f,  1.000000f, 0.0f, 0.0f,
 		-1.000000f,  0.003296f, -1.000000f, 0.0f, 0.0f,
-	};
-	va = new VertexArray(vertices, 3, 18, true);
+	};*/
+	va = new VertexArray(vertices, 3, 36, true);
 	va->setType(GL_TRIANGLES);
 
 	/*setCurrentControlPoints();
@@ -148,9 +150,11 @@ int Program::run(int argc, const char ** argv)
 
 	shaderProgram.bind();
 
-	view = mat4();
-	view = translate(view, vec3(0.0f, 0.0f, -4.0f));
-	shaderProgram.setMat4("view", view);
+	//view = mat4();
+	//view = translate(view, vec3(0.0f, 0.0f, -4.0f));
+	//shaderProgram.setMat4("view", view);
+
+	camera = new Camera(shaderProgram);
 
 	projection = mat4();
 	projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
@@ -383,6 +387,7 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 {
 	if (action == GLFW_RELEASE)
 		return;
+	camera->processKeyboard(key);
 	if ((key >= 49) && (key <= 56)) {
 		//setQuantizationLevel(key - 48);
 		return;
@@ -493,6 +498,13 @@ bool Program::terminate(string message)
 }
 
 int main(int argc, const char** argv) {
+	/*A a;
+	a.testInt = 472;
+	a.testStr = "Initial test string in A";
+	B b(a);
+	a.testInt = 35;
+	a.testStr = "changed test string in A";
+	return 0;*/
 	Program p;
 	return p.run(argc, argv);
 }
