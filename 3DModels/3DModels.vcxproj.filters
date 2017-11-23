@@ -827,6 +827,9 @@
     <ClInclude Include="inc\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\OpenGL.cpp">
@@ -845,6 +848,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
