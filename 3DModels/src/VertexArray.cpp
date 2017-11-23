@@ -51,7 +51,7 @@ VertexArray::VertexArray(vector<GLfloat> data, GLuint dim, GLuint verts, bool en
 
 	if (enableTextureCoords) {
 		// Tell OpenGL how it is formatted
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, (this->dim + 2) * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, (this->dim + 2) * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 		if (OpenGL::error("glVertexAttribPointer 1"))
 			return;
 

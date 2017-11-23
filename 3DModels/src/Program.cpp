@@ -43,17 +43,83 @@ int Program::run(int argc, const char ** argv)
 	if (!initGLFW() || !initGLEW() || !initShaders())
 		return -1;
 	
-	va = new VertexArray(vector<float> { 
-		-1.0f, -1.0f, 0.0f, 0.0f,
-		 1.0f,  1.0f, 1.0f, 1.0f,
-		-1.0f,  1.0f, 0.0f, 1.0f,
-		-1.0f, -1.0f, 0.0f, 0.0f,
-		 1.0f, -1.0f, 1.0f, 0.0f,
-		 1.0f,  1.0f, 1.0f, 1.0f
-	}, 2, 6, true);
+	/*vector<float> vertices = {
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	};*/
+		/*1.000000, 0.003296, -1.000000, 0.0f, 0.0f,
+		1.000000, 0.003296, 1.000000, 0.0f, 0.0f,
+		-1.000000, 0.003296, 1.000000, 0.0f, 0.0f,
+		-1.000000, 0.003296, -1.000000, 0.0f, 0.0f,
+		-0.000000, 1.000000, 0.000000, 0.0f, 0.0f*/
+	vector<float> vertices = {
+		 1.000000f,  0.003296f,  1.000000f, 0.0f, 0.0f,
+		-1.000000f,  0.003296f, -1.000000f, 0.0f, 0.0f,
+		 1.000000f,  0.003296f, -1.000000f, 0.0f, 0.0f,
+
+		 1.000000f,  0.003296f, -1.000000f, 0.0f, 0.0f,
+		-0.000000f,  1.000000f,  0.000000f, 0.0f, 0.0f,
+		 1.000000f,  0.003296f,  1.000000f, 0.0f, 0.0f,
+
+		 1.000000f,  0.003296f,  1.000000f, 0.0f, 0.0f,
+		-0.000000f,  1.000000f,  0.000000f, 0.0f, 0.0f,
+		-1.000000f,  0.003296f,  1.000000f, 0.0f, 0.0f,
+
+		-1.000000f,  0.003296f,  1.000000f, 0.0f, 0.0f,
+		-0.000000f,  1.000000f,  0.000000f, 0.0f, 0.0f,
+		-1.000000f,  0.003296f, -1.000000f, 0.0f, 0.0f,
+
+		-0.000000f,  1.000000f,  0.000000f, 0.0f, 0.0f,
+		 1.000000f,  0.003296f, -1.000000f, 0.0f, 0.0f,
+		-1.000000f,  0.003296f, -1.000000f, 0.0f, 0.0f,
+
+		 1.000000f,  0.003296f,  1.000000f, 0.0f, 0.0f,
+		-1.000000f,  0.003296f,  1.000000f, 0.0f, 0.0f,
+		-1.000000f,  0.003296f, -1.000000f, 0.0f, 0.0f,
+	};
+	va = new VertexArray(vertices, 3, 18, true);
 	va->setType(GL_TRIANGLES);
 
-	setCurrentControlPoints();
+	/*setCurrentControlPoints();
 	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	string fileName = "sign.jpg";
@@ -61,24 +127,36 @@ int Program::run(int argc, const char ** argv)
 	if (pixels == nullptr) {
 		cerr << "Error loading image " << fileName << ": " << stbi_failure_reason() << endl;
 		return -1;
-	}
+	}*/
 
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, picWidth, picHeight, 0, GL_RGB, GL_FLOAT, pixels);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	stbi_image_free(pixels);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	//glGenTextures(1, &texture);
+	//glBindTexture(GL_TEXTURE_2D, texture);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, picWidth, picHeight, 0, GL_RGB, GL_FLOAT, pixels);
+	//glGenerateMipmap(GL_TEXTURE_2D);
+	//stbi_image_free(pixels);
+	//glBindTexture(GL_TEXTURE_2D, 0);
 
 	// Create aspect ratio scaling
-	float larger = (picWidth >= picHeight) ? picWidth : picHeight;
-	float scaleX = picWidth / larger;
-	float scaleY = picHeight / larger;
+	//float larger = (picWidth >= picHeight) ? picWidth : picHeight;
+	//float scaleX = picWidth / larger;
+	//float scaleY = picHeight / larger;
 
-	aspectRatioScaling = vec3(scaleX, scaleY, 1.0f);
+	//aspectRatioScaling = vec3(scaleX, scaleY, 1.0f);
 
-	setModel();
-	setTransform();
+	//setModel();
+	//setTransform();
+
+	shaderProgram.bind();
+
+	view = mat4();
+	view = translate(view, vec3(0.0f, 0.0f, -4.0f));
+	shaderProgram.setMat4("view", view);
+
+	projection = mat4();
+	projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+	shaderProgram.setMat4("projection", projection);
+
+	glEnable(GL_DEPTH_TEST);
 
 	while (live) {
 		render();
@@ -95,21 +173,22 @@ int Program::run(int argc, const char ** argv)
 void Program::render()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glBindTexture(GL_TEXTURE_2D, texture);
+	//glBindTexture(GL_TEXTURE_2D, texture);
+	setModel();
 	shaderProgram.bind();
-	shaderProgram.setInt("curve", false);
+	//shaderProgram.setInt("curve", false);
 	va->draw();
-	shaderProgram.setInt("curve", true);
-	currentControlPoints->draw();
-	for (VertexArray *controlPointSet : controlPointSets) {
-		controlPointSet->draw();
-	}
-	tessellationProgram.bind();
-	for (VertexArray *curve : curves) {
-		curve->draw();
-	}
+	//shaderProgram.setInt("curve", true);
+	//currentControlPoints->draw();
+	//for (VertexArray *controlPointSet : controlPointSets) {
+	//	controlPointSet->draw();
+	//}
+	//tessellationProgram.bind();
+	//for (VertexArray *curve : curves) {
+	//	curve->draw();
+	//}
 
 	glfwSwapBuffers(window);
 }
@@ -174,7 +253,7 @@ bool Program::initShaders()
 	if (!shaderProgram.link())
 		return terminate("Error linking shader program");
 
-	if (!tessellationProgram.attachShader("data/tessellationVertex.glsl", GL_VERTEX_SHADER))
+	/*if (!tessellationProgram.attachShader("data/tessellationVertex.glsl", GL_VERTEX_SHADER))
 		return terminate("Error attaching tessellation vertex shader");
 
 	if (!tessellationProgram.attachShader("data/tessellationFragment.glsl", GL_FRAGMENT_SHADER))
@@ -187,32 +266,34 @@ bool Program::initShaders()
 		return terminate("Error attaching tessellation evaluation shader");
 
 	if (!tessellationProgram.link())
-		return terminate("Error linking tessellation shader program");
+		return terminate("Error linking tessellation shader program");*/
 
 	return !OpenGL::error("Program::initShaders() assert");
 }
 
 void Program::setModel()
 {
-	model = mat4();
-	model = translate(model, reverseTranslation);
-	model = scale(model, reverseScaling);
-	model = scale(model, aspectRatioScaling);
+	model = mat4(1.0f);
+	//model = translate(model, reverseTranslation);
+	//model = scale(model, reverseScaling);
+	//model = scale(model, aspectRatioScaling);
+	//model = glm::rotate(model, glm::radians(50.0f), vec3(1.0f, 0.0f, 0.0f));
+	//model = glm::rotate(model, glm::radians((float)((int)glfwGetTime() % 360)), vec3(0.0f, 1.0f, 0.0f));
 	shaderProgram.bind();
 	shaderProgram.setMat4("model", model);
-	tessellationProgram.bind();
-	tessellationProgram.setMat4("model", model);
+	//tessellationProgram.bind();
+	//tessellationProgram.setMat4("model", model);
 }
 
 void Program::setTransform()
 {
-	transform = mat4();
+	/*transform = mat4();
 	transform = translate(transform, vec3(translation, 0.0));
 	transform = scale(transform, vec3(scaleFactor, scaleFactor, 1.0f));
 	shaderProgram.bind();
 	shaderProgram.setMat4("transform", transform);
 	tessellationProgram.bind();
-	tessellationProgram.setMat4("transform", transform);
+	tessellationProgram.setMat4("transform", transform);*/
 }
 
 void Program::setQuantizationLevel(int level)
@@ -278,13 +359,13 @@ void Program::sizeCallback(GLFWwindow * window, int width, int height)
 
 void Program::sizeChange(int width, int height)
 {
-	reverseTranslation = vec3(-(width - this->originalWidth), -(height - this->originalHeight), 0.0);
-	reverseTranslation.x *= (2 / (double)width);
-	reverseTranslation.y *= (2 / (double)height);
+	//reverseTranslation = vec3(-(width - this->originalWidth), -(height - this->originalHeight), 0.0);
+	//reverseTranslation.x *= (2 / (double)width);
+	//reverseTranslation.y *= (2 / (double)height);
 
-	reverseScaling = vec3((double)1 / ((double)width / (double)(this->originalWidth)), (double)1 / ((double)height / (double)(this->originalHeight)), 1.0f);
+	//reverseScaling = vec3((double)1 / ((double)width / (double)(this->originalWidth)), (double)1 / ((double)height / (double)(this->originalHeight)), 1.0f);
 
-	setModel();
+	//setModel();
 
 	glViewport(0, 0, width, height);
 	render();
@@ -303,7 +384,7 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 	if (action == GLFW_RELEASE)
 		return;
 	if ((key >= 49) && (key <= 56)) {
-		setQuantizationLevel(key - 48);
+		//setQuantizationLevel(key - 48);
 		return;
 	}
 	switch (key) {
@@ -311,18 +392,18 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 			live = false;
 			break;
 		case GLFW_KEY_G:
-			grayscale = !grayscale;
-			setGrayscale();
+			//grayscale = !grayscale;
+			//setGrayscale();
 			break;
 		case GLFW_KEY_R:
-			renderCurve();
+			//renderCurve();
 			break;
 		case GLFW_KEY_C:
-			closedMode = !closedMode;
+			//closedMode = !closedMode;
 			break;
 		case GLFW_KEY_DELETE:
 		case GLFW_KEY_BACKSPACE:
-			if (controlPoints.size() > 1) {
+			/*if (controlPoints.size() > 1) {
 				controlPoints.pop_back();
 				controlPoints.pop_back();
 				setCurrentControlPoints();
@@ -330,7 +411,7 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 			else if (curves.size() > 0) {
 				curves.pop_back();
 				controlPointSets.pop_back();
-			}
+			}*/
 			break;
 	}
 }
@@ -342,14 +423,14 @@ void Program::scrollCallback(GLFWwindow * window, double xOffset, double yOffset
 
 void Program::scrollChange(double xOffset, double yOffset)
 {
-	if (yOffset > 0) {
+	/*if (yOffset > 0) {
 		scaleFactor *= 1.1;
 		setTransform();
 	}
 	else if (yOffset < 0) {
 		scaleFactor *= 0.9;
 		setTransform();
-	}
+	}*/
 }
 
 void Program::mouseButtonCallback(GLFWwindow * window, int button, int action, int mods)
@@ -361,13 +442,13 @@ void Program::mouseButtonInput(int button, int action, int mods)
 {
 	if (button == GLFW_MOUSE_BUTTON_LEFT) {
 		if (action == GLFW_PRESS) {
-			buttonPressed = true;
+			/*buttonPressed = true;
 			double xPos, yPos;
 			glfwGetCursorPos(window, &xPos, &yPos);
-			pressOrigin = vec2(xPos, yPos);
+			pressOrigin = vec2(xPos, yPos);*/
 		}
 		else if (action == GLFW_RELEASE) {
-			buttonPressed = false;
+			/*buttonPressed = false;
 			previousTranslation = translation;
 			double xPos, yPos;
 			glfwGetCursorPos(window, &xPos, &yPos);
@@ -382,7 +463,7 @@ void Program::mouseButtonInput(int button, int action, int mods)
 				controlPoints.push_back(releaseLocation.x);
 				controlPoints.push_back(releaseLocation.y);
 				setCurrentControlPoints();
-			}
+			}*/
 		}
 	}
 }
@@ -394,14 +475,14 @@ void Program::cursorPositionCallback(GLFWwindow * window, double xPos, double yP
 
 void Program::cursorPositionChange(double xPos, double yPos)
 {
-	if (buttonPressed) {
+	/*if (buttonPressed) {
 		translation = vec2(xPos, yPos) - pressOrigin;
 		translation.y = -translation.y;
 		translation.x *= (2 / (float)width);
 		translation.y *= (2 / (float)height);
 		translation = previousTranslation + translation;
 		setTransform();
-	}
+	}*/
 }
 
 bool Program::terminate(string message)

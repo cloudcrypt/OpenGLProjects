@@ -39,7 +39,9 @@ private:
 	vector<VertexArray*> controlPointSets;
 
 	mat4 model;
-	mat4 transform;
+	mat4 view;
+	mat4 projection;
+	//mat4 transform;
 
 	char *windowName = "3DModels";
 	int width = 1024;
