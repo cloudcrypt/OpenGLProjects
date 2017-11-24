@@ -12,6 +12,7 @@ void Camera::setView()
 	view = lookAt(pos, pos + direction, up);
 	shaderProgram.bind();
 	shaderProgram.setMat4("view", view);
+	shaderProgram.setVec3("cameraPos", pos);
 }
 
 Camera::Camera(const ShaderProgram &sp, vec3 pos): shaderProgram(sp)

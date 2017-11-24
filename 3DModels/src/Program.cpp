@@ -158,6 +158,8 @@ int Program::run(int argc, const char ** argv)
 
 	camera = new Camera(shaderProgram, vec3(0.0f, 0.0f, 7.0f));
 
+	shaderProgram.setVec3("lightPos", lightPos);
+
 	projection = mat4();
 	projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
 	shaderProgram.setMat4("projection", projection);

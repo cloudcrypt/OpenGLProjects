@@ -94,8 +94,18 @@ void Model::setModelMatrix()
 	modelMatrix = glm::rotate(modelMatrix, glm::radians((float)yaw), vec3(0.0f, 1.0f, 0.0f));
 	modelMatrix = glm::rotate(modelMatrix, glm::radians((float)pitch), vec3(1.0f, 0.0f, 0.0f));
 	modelMatrix = glm::scale(modelMatrix, vec3(scaleFactor, scaleFactor, scaleFactor));
+	modelMatrix = glm::translate(modelMatrix, vec3(-meshes.at(0).center.x, -meshes.at(0).center.y, -meshes.at(0).center.z));
 	shaderProgram.bind();
 	shaderProgram.setMat4("model", modelMatrix);
+}
+
+void Model::setMaterial()
+{
+	shaderProgram.bind();
+	shaderProgram.setFloat("material.specularExp", material.specularExp);
+	shaderProgram.setVec3("material.specular", material.specular);
+	shaderProgram.setVec3("material.diffuse", material.diffuse);
+	shaderProgram.setVec3("material.ambient", material.ambient);
 }
 
 void Model::loadModel(string objFile)
@@ -107,6 +117,7 @@ void Model::loadModel(string objFile)
 		exit(1);
 	}
 	string line;
+	string mtlFile;
 	vector<vec3> vertices;
 	vector<vec2> uvs;
 	vector<vec3> normals;
@@ -115,6 +126,9 @@ void Model::loadModel(string objFile)
 	{
 		if (line.substr(0, 1) == "#")
 			continue;
+		else if (line.substr(0, 6) == "mtllib") {
+			mtlFile = line.substr(7, string::npos);
+		}
 		else if (line.substr(0, 2) == "v ") {
 			vec3 vertex;
 			sscanf_s(line.c_str(), "v %f %f %f", &vertex.x, &vertex.y, &vertex.z);
@@ -144,5 +158,46 @@ void Model::loadModel(string objFile)
 			}
 		}
 	}
+	if (mtlFile != "") {
+		loadMaterial(mtlFile);
+	}
 	this->meshes.push_back(Mesh(vertices, uvs, normals, indices));
+}
+
+void Model::loadMaterial(string mtlFile)
+{
+	string mtlPath = "objs/" + mtlFile;
+	std::ifstream f(mtlPath);
+	if (!f)
+	{
+		std::cerr << "Error opening file " << mtlFile << std::endl;
+		exit(1);
+	}
+	string line;
+	while (std::getline(f, line))
+	{
+		if (line.substr(0, 1) == "#")
+			continue;
+		else if (line.substr(0, 2) == "Ns") {
+			float specularExp;
+			sscanf_s(line.c_str(), "Ns %f", &specularExp);
+			material.specularExp = specularExp;
+		}
+		else if (line.substr(0, 2) == "Ks") {
+			vec3 specular;
+			sscanf_s(line.c_str(), "Ks %f %f %f", &specular.x, &specular.y, &specular.z);
+			material.specular = specular;
+		}
+		else if (line.substr(0, 2) == "Kd") {
+			vec3 diffuse;
+			sscanf_s(line.c_str(), "Kd %f %f %f", &diffuse.x, &diffuse.y, &diffuse.z);
+			material.diffuse = diffuse;
+		}
+		else if (line.substr(0, 2) == "Ka") {
+			vec3 ambient;
+			sscanf_s(line.c_str(), "Ka %f %f %f", &ambient.x, &ambient.y, &ambient.z);
+			material.ambient = ambient;
+		}
+	}
+	setMaterial();
 }

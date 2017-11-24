@@ -48,6 +48,7 @@ struct Vertex {
 class Mesh
 {
 public:
+	vec3 center;
 	Mesh(vector<vec3> vertices, vector<vec2> uvs, vector<vec3> normals, vector<Index> indices);
 	~Mesh();
 	void draw();

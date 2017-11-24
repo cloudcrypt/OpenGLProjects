@@ -46,6 +46,8 @@ private:
 	mat4 model;
 	mat4 view;
 	mat4 projection;
+
+	vec3 lightPos = vec3(3.0f, 3.0f, 3.0f);
 	//mat4 transform;
 
 	char *windowName = "3DModels";

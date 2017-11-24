@@ -7,6 +7,13 @@
 
 using std::string;
 
+struct Material {
+	float specularExp;
+	vec3 specular;
+	vec3 diffuse;
+	vec3 ambient;
+};
+
 class Model
 {
 public:
@@ -16,6 +23,7 @@ public:
 	void processKeyboard(int key);
 private:
 	mat4 modelMatrix;
+	Material material;
 
 	float scaleFactor = 1.0f;
 	int pitch = 0;								// rotation about x-axis
@@ -29,6 +37,8 @@ private:
 	void setYaw();
 	void setRoll();
 	void setModelMatrix();
+	void setMaterial();
 	void loadModel(string objFile);
+	void loadMaterial(string mtlFile);
 };
 

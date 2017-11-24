@@ -29,6 +29,7 @@ public:
 	bool setInt(string variable, GLint value) const;
 	bool setFloat(string variable, GLfloat value) const;
 	bool setVec2(string variable, GLfloat value1, GLfloat value2) const;
+	bool setVec3(string variable, glm::vec3 vector) const;
 	bool setMat4(string variable, mat4 mat) const;
 
 	bool bind() const;
