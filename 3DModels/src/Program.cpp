@@ -45,7 +45,7 @@ int Program::run(int argc, const char ** argv)
 	if (!initGLFW() || !initGLEW() || !initShaders())
 		return -1;
 	
-	vector<float> vertices = {
+	/*vector<float> vertices = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
 		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -87,7 +87,7 @@ int Program::run(int argc, const char ** argv)
 		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-	};
+	};*/
 		/*1.000000, 0.003296, -1.000000, 0.0f, 0.0f,
 		1.000000, 0.003296, 1.000000, 0.0f, 0.0f,
 		-1.000000, 0.003296, 1.000000, 0.0f, 0.0f,
@@ -118,8 +118,8 @@ int Program::run(int argc, const char ** argv)
 		-1.000000f,  0.003296f,  1.000000f, 0.0f, 0.0f,
 		-1.000000f,  0.003296f, -1.000000f, 0.0f, 0.0f,
 	};*/
-	va = new VertexArray(vertices, 3, 36, true);
-	va->setType(GL_TRIANGLES);
+	//va = new VertexArray(vertices, 3, 36, true);
+	//va->setType(GL_TRIANGLES);
 
 	/*setCurrentControlPoints();
 	glEnable(GL_PROGRAM_POINT_SIZE);
@@ -148,13 +148,15 @@ int Program::run(int argc, const char ** argv)
 	//setModel();
 	//setTransform();
 
+	objModel = new Model("objs/coffee_cup.obj", shaderProgram);
+
 	shaderProgram.bind();
 
 	//view = mat4();
 	//view = translate(view, vec3(0.0f, 0.0f, -4.0f));
 	//shaderProgram.setMat4("view", view);
 
-	camera = new Camera(shaderProgram);
+	camera = new Camera(shaderProgram, vec3(0.0f, 0.0f, 7.0f));
 
 	projection = mat4();
 	projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
@@ -180,10 +182,13 @@ void Program::render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//glBindTexture(GL_TEXTURE_2D, texture);
-	setModel();
+	//setModel();
 	shaderProgram.bind();
 	//shaderProgram.setInt("curve", false);
-	va->draw();
+	//va->draw();
+
+	objModel->draw();
+
 	//shaderProgram.setInt("curve", true);
 	//currentControlPoints->draw();
 	//for (VertexArray *controlPointSet : controlPointSets) {
@@ -314,9 +319,9 @@ void Program::setGrayscale()
 
 void Program::renderCurve()
 {
-	VertexArray *controlPointSet = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
-	controlPointSet->setType(GL_POINTS);
-	controlPointSets.push_back(controlPointSet);
+	//VertexArray *controlPointSet = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
+	//controlPointSet->setType(GL_POINTS);
+	//controlPointSets.push_back(controlPointSet);
 	vec2 first = vec2(controlPoints.at(0), controlPoints.at(1));
 	controlPoints.insert(controlPoints.begin(), first.y);
 	controlPoints.insert(controlPoints.begin(), first.x);
@@ -343,17 +348,17 @@ void Program::renderCurve()
 			expandedPoints.push_back(point);
 		}
 	}
-	VertexArray *curve = new VertexArray(expandedPoints, 2, expandedPoints.size() / 2, false);
-	curve->setType(GL_PATCHES);
-	curves.push_back(curve);
+	//VertexArray *curve = new VertexArray(expandedPoints, 2, expandedPoints.size() / 2, false);
+	//curve->setType(GL_PATCHES);
+	//curves.push_back(curve);
 	controlPoints.clear();
 	setCurrentControlPoints();
 }
 
 void Program::setCurrentControlPoints()
 {
-	currentControlPoints = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
-	currentControlPoints->setType(GL_POINTS);
+	//currentControlPoints = new VertexArray(controlPoints, 2, controlPoints.size() / 2, false);
+	//currentControlPoints->setType(GL_POINTS);
 }
 
 void Program::sizeCallback(GLFWwindow * window, int width, int height)
@@ -387,6 +392,7 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 {
 	if (action == GLFW_RELEASE)
 		return;
+	objModel->processKeyboard(key);
 	camera->processKeyboard(key);
 	if ((key >= 49) && (key <= 56)) {
 		//setQuantizationLevel(key - 48);
@@ -394,7 +400,7 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 	}
 	switch (key) {
 		case GLFW_KEY_Q:
-			live = false;
+			//live = false;
 			break;
 		case GLFW_KEY_G:
 			//grayscale = !grayscale;

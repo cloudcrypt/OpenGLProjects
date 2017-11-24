@@ -12,10 +12,10 @@
 #include <GL/glew.h>
 #include "OpenGL.h"
 
-VertexArray::VertexArray(vector<GLfloat> data, GLuint dim, GLuint verts, bool enableTextureCoords)
+VertexArray::VertexArray(vector<Vertex> vertices)
 {
-	this->dim = dim;
-	this->verts = verts;
+	//this->dim = dim;
+	verts = vertices.size();
 	// Generate a named vertex array and bind to it
 	glGenVertexArrays(1, &id);
 	if (OpenGL::error("glGenVertexArrays"))
@@ -35,30 +35,38 @@ VertexArray::VertexArray(vector<GLfloat> data, GLuint dim, GLuint verts, bool en
 		return;
 
 	// Transfer over the data
-	glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(GLfloat), data.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
 	if (OpenGL::error("glBufferData"))
 		return;
 
-	GLsizei stride = enableTextureCoords ? ((this->dim + 2) * sizeof(GLfloat)) : 0;
+	//GLsizei stride = enableTextureCoords ? ((this->dim + 2) * sizeof(GLfloat)) : 0;
 	// Tell OpenGL how it is formatted
-	glVertexAttribPointer(0, this->dim, GL_FLOAT, GL_FALSE, stride, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 	if (OpenGL::error("glVertexAttribPointer 0"))
 		return;
 
 	glEnableVertexAttribArray(0);
 	if (OpenGL::error("glEnableVertexAttribArray 0"))
 		return;
+	
+	//if (enableTextureCoords) {
+	// Tell OpenGL how it is formatted
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normal));
+	if (OpenGL::error("glVertexAttribPointer 1"))
+		return;
 
-	if (enableTextureCoords) {
-		// Tell OpenGL how it is formatted
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, (this->dim + 2) * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-		if (OpenGL::error("glVertexAttribPointer 1"))
-			return;
+	glEnableVertexAttribArray(1);
+	if (OpenGL::error("glEnableVertexAttribArray 1"))
+		return;
+	//}
 
-		glEnableVertexAttribArray(1);
-		if (OpenGL::error("glEnableVertexAttribArray 1"))
-			return;
-	}
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, uv));
+	if (OpenGL::error("glVertexAttribPointer 2"))
+		return;
+
+	glEnableVertexAttribArray(1);
+	if (OpenGL::error("glEnableVertexAttribArray 2"))
+		return;
 
 	// Unbind ourselves
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

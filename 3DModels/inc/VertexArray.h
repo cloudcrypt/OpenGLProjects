@@ -12,6 +12,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <vector>
+#include "Mesh.h"
 
 using std::vector;
 
@@ -24,7 +25,7 @@ private:
 	GLuint verts;
 	GLenum prim = GL_TRIANGLES;
 public:
-	VertexArray(vector<GLfloat> data, GLuint dim, GLuint verts, bool enableTextureCoords);
+	VertexArray(vector<Vertex> data);
 	bool draw();
 	bool setType(GLenum type);
 };
