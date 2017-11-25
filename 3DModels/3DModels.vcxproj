@@ -255,6 +255,7 @@ xcopy /s /y /d "$(ProjectDir)data" "$(OutDir)data\"</Command>
     <None Include="inc\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\ChessBoard.h" />
     <ClInclude Include="inc\Camera.h" />
     <ClInclude Include="inc\glm\common.hpp" />
     <ClInclude Include="inc\glm\detail\func_common.hpp" />
@@ -409,6 +410,7 @@ xcopy /s /y /d "$(ProjectDir)data" "$(OutDir)data\"</Command>
     <ClInclude Include="inc\Mesh.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ChessBoard.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Camera.cpp" />

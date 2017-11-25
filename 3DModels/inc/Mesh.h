@@ -16,6 +16,12 @@ struct BoundingBox {
 	float x;
 	float y;
 	float z;
+	float xMin;
+	float xMax;
+	float yMin;
+	float yMax;
+	float zMin;
+	float zMax;
 };
 
 struct Index {

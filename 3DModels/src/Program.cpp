@@ -147,8 +147,11 @@ int Program::run(int argc, const char ** argv)
 
 	//setModel();
 	//setTransform();
+	setReverseScaling();
 
-	objModel = new Model("timmy_cup", shaderProgram, "timmy_cup.colour.png");
+	objModel = new Model("coffee_cup", shaderProgram, "coffee_cup.colour.png");
+	//objModel = new ChessBoard(shaderProgram);
+	//objModel->pitch += 45;
 
 	shaderProgram.bind();
 
@@ -176,6 +179,14 @@ int Program::run(int argc, const char ** argv)
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	return 0;
+}
+
+void Program::setReverseScaling()
+{
+	reverseScalingMatrix = mat4(1.0f);
+	reverseScalingMatrix = scale(reverseScalingMatrix, reverseScaling);
+	shaderProgram.bind();
+	shaderProgram.setMat4("reverseScaling", reverseScalingMatrix);
 }
 
 void Program::render()
@@ -381,9 +392,9 @@ void Program::sizeChange(int width, int height)
 	//reverseTranslation.x *= (2 / (double)width);
 	//reverseTranslation.y *= (2 / (double)height);
 
-	//reverseScaling = vec3((double)1 / ((double)width / (double)(this->originalWidth)), (double)1 / ((double)height / (double)(this->originalHeight)), 1.0f);
+	reverseScaling = vec3((double)1 / ((double)width / (double)(this->originalWidth)), (double)1 / ((double)height / (double)(this->originalHeight)), 1.0f);
 
-	//setModel();
+	setReverseScaling();
 
 	glViewport(0, 0, width, height);
 	render();

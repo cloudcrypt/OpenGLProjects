@@ -15,10 +15,10 @@ using glm::vec2;
 using glm::vec3;
 using std::vector;
 
-Model::Model(string modelName, const ShaderProgram &sp, string textureType): shaderProgram(sp)
+Model::Model(string modelName, const ShaderProgram &sp, string textureFile): shaderProgram(sp)
 {
 	loadModel(modelName);
-	loadTextures(modelName, textureType);
+	loadTextures(modelName, textureFile);
 	setModelMatrix();
 }
 
@@ -30,6 +30,7 @@ void Model::draw()
 {
 	setMaterial();
 	setTextures();
+	setModelMatrix();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, material.diffuse);
 	glActiveTexture(GL_TEXTURE1);
@@ -37,6 +38,13 @@ void Model::draw()
 	for (Mesh &m : meshes) {
 		m.draw();
 	}
+}
+
+void Model::translate(float x, float y, float z)
+{
+	translation.x += x;
+	translation.y += y;
+	translation.z += z;
 }
 
 BoundingBox Model::getBoundingBox()
@@ -49,35 +57,35 @@ void Model::processKeyboard(int key)
 	switch (key) {
 		case GLFW_KEY_UP:
 			scaleFactor *= 1.1;
-			setModelMatrix();
+			//setModelMatrix();
 			break;
 		case GLFW_KEY_DOWN:
 			scaleFactor *= 0.9;
-			setModelMatrix();
+			//setModelMatrix();
 			break;
 		case GLFW_KEY_D:
 			yaw++;
-			setModelMatrix();
+			//setModelMatrix();
 			break;
 		case GLFW_KEY_A:
 			yaw--;
-			setModelMatrix();
+			//setModelMatrix();
 			break;
 		case GLFW_KEY_W:
 			pitch--;
-			setModelMatrix();
+			//setModelMatrix();
 			break;
 		case GLFW_KEY_S:
 			pitch++;
-			setModelMatrix();
+			//setModelMatrix();
 			break;
 		case GLFW_KEY_E:
 			roll--;
-			setModelMatrix();
+			//setModelMatrix();
 			break;
 		case GLFW_KEY_Q:
 			roll++;
-			setModelMatrix();
+			//setModelMatrix();
 			break;
 	}
 }
@@ -103,6 +111,7 @@ void Model::setRoll()
 void Model::setModelMatrix()
 {
 	modelMatrix = mat4(1.0f);
+	modelMatrix = glm::translate(modelMatrix, translation);
 	modelMatrix = glm::rotate(modelMatrix, glm::radians((float)roll), vec3(0.0f, 0.0f, 1.0f));
 	modelMatrix = glm::rotate(modelMatrix, glm::radians((float)yaw), vec3(0.0f, 1.0f, 0.0f));
 	modelMatrix = glm::rotate(modelMatrix, glm::radians((float)pitch), vec3(1.0f, 0.0f, 0.0f));
@@ -129,7 +138,7 @@ void Model::setTextures()
 
 void Model::loadModel(string modelName)
 {
-	string objFile = "objs/" + modelName + "/" + modelName + ".obj";
+	string objFile = "objs/" + modelName + "/" + ((modelName.substr(0, 5) == "chess") ? modelName.substr(6, string::npos) : modelName) + ".obj";
 	std::ifstream f(objFile);
 	if (!f)
 	{
@@ -243,7 +252,7 @@ void Model::loadTextures(string modelName, string textureFile)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 	stbi_image_free(pixels);
 
-	string aoPng = "objs/" + modelName + "/" + modelName + ".ao.png";
+	string aoPng = "objs/" + modelName + "/" + ((modelName.substr(0, 5) == "chess") ? modelName.substr(6, string::npos) : modelName) + ".ao.png";
 	pixels = stbi_loadf(aoPng.c_str(), &x, &y, &channels, STBI_rgb);
 	if (pixels == nullptr) {
 		std::cerr << "Error loading image " << aoPng << ": " << stbi_failure_reason() << std::endl;

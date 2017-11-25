@@ -51,6 +51,12 @@ Mesh::Mesh(vector<vec3> vertices, vector<vec2> uvs, vector<vec3> normals, vector
 	boundingBox.x = xMax - xMin;
 	boundingBox.y = yMax - yMin;
 	boundingBox.z = zMax - zMin;
+	boundingBox.xMax = xMax;
+	boundingBox.xMin = xMin;
+	boundingBox.yMax = yMax;
+	boundingBox.yMin = yMin;
+	boundingBox.zMax = zMax;
+	boundingBox.zMin = zMin;
 	va = new VertexArray(this->vertices);
 
 }

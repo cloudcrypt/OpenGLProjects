@@ -16,6 +16,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include "glm/glm.hpp"
+#include "ChessBoard.h"
 
 using std::endl;
 using std::string;
@@ -59,6 +60,8 @@ private:
 	int originalHeight = height;
 	float scaleFactor = 1.0f;
 
+	void setReverseScaling();
+
 	bool buttonPressed = false;
 	bool closedMode = false;
 
@@ -69,6 +72,8 @@ private:
 	vec2 releaseLocation;
 	vec2 previousTranslation = vec2(0.0, 0.0);
 	vec2 translation = vec2(0.0, 0.0);
+
+	mat4 reverseScalingMatrix;
 
 	void render();
 	bool initGLFW();

@@ -18,19 +18,22 @@ struct Material {
 class Model
 {
 public:
-	Model(string modelName, const ShaderProgram &sp, string textureFile);
-	~Model();
-	void draw();
-	BoundingBox getBoundingBox();
-	void processKeyboard(int key);
-private:
-	mat4 modelMatrix;
-	Material material;
 
 	float scaleFactor = 1.0f;
 	int pitch = 0;								// rotation about x-axis
 	int yaw = 0;								// rotation about y-axis
 	int roll = 0;								// rotation about z-axis
+
+	Model(string modelName, const ShaderProgram &sp, string textureFile);
+	~Model();
+	void draw();
+	void translate(float x, float y, float z);
+	BoundingBox getBoundingBox();
+	void processKeyboard(int key);
+private:
+	mat4 modelMatrix;
+	Material material;
+	vec3 translation = vec3(0.0f, 0.0f, 0.0f);
 
 	const ShaderProgram &shaderProgram;
 	vector<Mesh> meshes;
