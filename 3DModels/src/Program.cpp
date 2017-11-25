@@ -121,22 +121,22 @@ int Program::run(int argc, const char ** argv)
 	//va = new VertexArray(vertices, 3, 36, true);
 	//va->setType(GL_TRIANGLES);
 
-	/*setCurrentControlPoints();
-	glEnable(GL_PROGRAM_POINT_SIZE);
+	//setCurrentControlPoints();
+	//glEnable(GL_PROGRAM_POINT_SIZE);
 
-	string fileName = "sign.jpg";
+	/*string fileName = "objs/coffee_cup.colour.png";
 	float* pixels = stbi_loadf(fileName.c_str(), &picWidth, &picHeight, &channels, 0);
 	if (pixels == nullptr) {
 		cerr << "Error loading image " << fileName << ": " << stbi_failure_reason() << endl;
 		return -1;
 	}*/
 
-	//glGenTextures(1, &texture);
-	//glBindTexture(GL_TEXTURE_2D, texture);
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, picWidth, picHeight, 0, GL_RGB, GL_FLOAT, pixels);
-	//glGenerateMipmap(GL_TEXTURE_2D);
-	//stbi_image_free(pixels);
-	//glBindTexture(GL_TEXTURE_2D, 0);
+	/*glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, picWidth, picHeight, 0, GL_RGB, GL_FLOAT, pixels);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(pixels);
+	glBindTexture(GL_TEXTURE_2D, 0);*/
 
 	// Create aspect ratio scaling
 	//float larger = (picWidth >= picHeight) ? picWidth : picHeight;
@@ -148,7 +148,7 @@ int Program::run(int argc, const char ** argv)
 	//setModel();
 	//setTransform();
 
-	objModel = new Model("objs/coffee_cup.obj", shaderProgram);
+	objModel = new Model("timmy_cup", shaderProgram, "timmy_cup.colour.png");
 
 	shaderProgram.bind();
 
@@ -156,7 +156,7 @@ int Program::run(int argc, const char ** argv)
 	//view = translate(view, vec3(0.0f, 0.0f, -4.0f));
 	//shaderProgram.setMat4("view", view);
 
-	camera = new Camera(shaderProgram, vec3(0.0f, 0.0f, 7.0f));
+	camera = new Camera(shaderProgram, objModel->getBoundingBox());
 
 	shaderProgram.setVec3("lightPos", lightPos);
 
@@ -180,9 +180,10 @@ int Program::run(int argc, const char ** argv)
 
 void Program::render()
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//glActiveTexture(GL_TEXTURE0);
 	//glBindTexture(GL_TEXTURE_2D, texture);
 	//setModel();
 	shaderProgram.bind();
@@ -315,8 +316,14 @@ void Program::setQuantizationLevel(int level)
 
 void Program::setGrayscale()
 {
+	//shaderProgram.bind();
+	//shaderProgram.setInt("grayscale", grayscale);
+}
+
+void Program::setAoMode()
+{
 	shaderProgram.bind();
-	shaderProgram.setInt("grayscale", grayscale);
+	shaderProgram.setInt("aoMode", aoMode);
 }
 
 void Program::renderCurve()
@@ -404,9 +411,9 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 		case GLFW_KEY_Q:
 			//live = false;
 			break;
-		case GLFW_KEY_G:
-			//grayscale = !grayscale;
-			//setGrayscale();
+		case GLFW_KEY_O:
+			aoMode = !aoMode;
+			setAoMode();
 			break;
 		case GLFW_KEY_R:
 			//renderCurve();

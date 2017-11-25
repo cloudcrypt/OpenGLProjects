@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
+#include "stb_image.h"
 
 #include "Mesh.h"
 
@@ -14,9 +15,10 @@ using glm::vec2;
 using glm::vec3;
 using std::vector;
 
-Model::Model(string objFile, const ShaderProgram &sp): shaderProgram(sp)
+Model::Model(string modelName, const ShaderProgram &sp, string textureType): shaderProgram(sp)
 {
-	loadModel(objFile);
+	loadModel(modelName);
+	loadTextures(modelName, textureType);
 	setModelMatrix();
 }
 
@@ -26,9 +28,20 @@ Model::~Model()
 
 void Model::draw()
 {
+	setMaterial();
+	setTextures();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, material.diffuse);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, material.ao);
 	for (Mesh &m : meshes) {
 		m.draw();
 	}
+}
+
+BoundingBox Model::getBoundingBox()
+{
+	return meshes.at(0).boundingBox;
 }
 
 void Model::processKeyboard(int key)
@@ -104,12 +117,19 @@ void Model::setMaterial()
 	shaderProgram.bind();
 	shaderProgram.setFloat("material.specularExp", material.specularExp);
 	shaderProgram.setVec3("material.specular", material.specular);
-	shaderProgram.setVec3("material.diffuse", material.diffuse);
 	shaderProgram.setVec3("material.ambient", material.ambient);
 }
 
-void Model::loadModel(string objFile)
+void Model::setTextures()
 {
+	shaderProgram.bind();
+	shaderProgram.setInt("material.diffuse", 0);
+	shaderProgram.setInt("material.ao", 1);
+}
+
+void Model::loadModel(string modelName)
+{
+	string objFile = "objs/" + modelName + "/" + modelName + ".obj";
 	std::ifstream f(objFile);
 	if (!f)
 	{
@@ -159,14 +179,14 @@ void Model::loadModel(string objFile)
 		}
 	}
 	if (mtlFile != "") {
-		loadMaterial(mtlFile);
+		loadMaterial(mtlFile, modelName);
 	}
 	this->meshes.push_back(Mesh(vertices, uvs, normals, indices));
 }
 
-void Model::loadMaterial(string mtlFile)
+void Model::loadMaterial(string mtlFile, string modelName)
 {
-	string mtlPath = "objs/" + mtlFile;
+	string mtlPath = "objs/" + modelName + "/" + mtlFile;
 	std::ifstream f(mtlPath);
 	if (!f)
 	{
@@ -188,11 +208,11 @@ void Model::loadMaterial(string mtlFile)
 			sscanf_s(line.c_str(), "Ks %f %f %f", &specular.x, &specular.y, &specular.z);
 			material.specular = specular;
 		}
-		else if (line.substr(0, 2) == "Kd") {
+		/*else if (line.substr(0, 2) == "Kd") {
 			vec3 diffuse;
 			sscanf_s(line.c_str(), "Kd %f %f %f", &diffuse.x, &diffuse.y, &diffuse.z);
 			material.diffuse = diffuse;
-		}
+		}*/
 		else if (line.substr(0, 2) == "Ka") {
 			vec3 ambient;
 			sscanf_s(line.c_str(), "Ka %f %f %f", &ambient.x, &ambient.y, &ambient.z);
@@ -200,4 +220,44 @@ void Model::loadMaterial(string mtlFile)
 		}
 	}
 	setMaterial();
+}
+
+void Model::loadTextures(string modelName, string textureFile)
+{
+	/*if (textureType != "") {
+		textureType = "." + textureType;
+	}*/
+	string diffusePng = "objs/" + modelName + "/" + textureFile;
+	int x, y, channels;
+	float *pixels = stbi_loadf(diffusePng.c_str(), &x, &y, &channels, STBI_rgb);
+	if (pixels == nullptr) {
+		std::cerr << "Error loading image " << diffusePng << ": " << stbi_failure_reason() << std::endl;
+		exit(-1);
+	}
+
+	glGenTextures(1, &material.diffuse);
+	glBindTexture(GL_TEXTURE_2D, material.diffuse);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGB, GL_FLOAT, pixels);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	stbi_image_free(pixels);
+
+	string aoPng = "objs/" + modelName + "/" + modelName + ".ao.png";
+	pixels = stbi_loadf(aoPng.c_str(), &x, &y, &channels, STBI_rgb);
+	if (pixels == nullptr) {
+		std::cerr << "Error loading image " << aoPng << ": " << stbi_failure_reason() << std::endl;
+		exit(-1);
+	}
+
+	glGenTextures(1, &material.ao);
+	glBindTexture(GL_TEXTURE_2D, material.ao);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGB, GL_FLOAT, pixels);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	stbi_image_free(pixels);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	setTextures();
 }

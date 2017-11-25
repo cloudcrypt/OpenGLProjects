@@ -4,6 +4,8 @@
 
 #include "ShaderProgram.h"
 
+#include "Mesh.h"
+
 using glm::vec3;
 using glm::mat4;
 
@@ -24,7 +26,7 @@ private:
 	void setView();
 
 public:
-	Camera(const ShaderProgram &sp, vec3 pos = vec3(0.0f, 0.0f, 3.0f));
+	Camera(const ShaderProgram &sp, BoundingBox boundingBox, vec3 pos = vec3(0.0f, 0.0f, 3.0f));
 
 	void processKeyboard(int key);
 

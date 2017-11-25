@@ -1,6 +1,6 @@
 #version 410
 
-//in vec2 TextureCoord;
+in vec2 textureCoord;
 in vec3 normal;
 in vec3 fragPos;
 
@@ -9,11 +9,12 @@ out vec4 FragmentColour;
 struct Material {
 	float specularExp;
 	vec3 specular;
-	vec3 diffuse;
+	sampler2D diffuse;
+	sampler2D ao;
 	vec3 ambient;
 };
 
-uniform Material material = Material(32, vec3(0.5,0.5,0.5), vec3(1.0,0.5,0.31), vec3(1.0,0.5,0.31));
+uniform Material material; // = Material(32, vec3(0.5, 0.5, 0.5), vec3(1.0, 0.5, 0.31), vec3(1.0, 0.5, 0.31));
 uniform vec3 lightPos;
 uniform vec3 cameraPos;
 //uniform vec3 objectColour = vec3(1, 0.5, 0.31);
@@ -22,7 +23,7 @@ uniform vec3 lightColour = vec3(1, 1, 1);
 //uniform sampler2D imageTexture;
 //uniform int quantizationLevel = 8;
 //uniform bool grayscale = false;
-//uniform bool curve = false;
+uniform bool aoMode = false;
 
 //float quantizeValue(float value, float originalLevel, float targetLevel) {
 //  value *= (pow(2, originalLevel) - 1);
@@ -39,13 +40,20 @@ uniform vec3 lightColour = vec3(1, 1, 1);
 void main() {
   //FragmentColour = vec4(1,0,0,1);
   float ambientStrength = 0.2; //0.1;
-  vec3 ambient = ambientStrength * (lightColour * material.ambient);
+  //vec3 ambient = ambientStrength * (lightColour * material.ambient);
+  vec3 ambient;
+  if (aoMode) {
+	  ambient = vec3(texture(material.ao, textureCoord)) * vec3(texture(material.diffuse, textureCoord));
+  } else {
+	  ambient = ambientStrength * vec3(texture(material.diffuse, textureCoord));
+  }
 
   float diffuseStrength = 0.5;
   vec3 norm = normalize(normal);
   vec3 lightDir = normalize(lightPos - fragPos);
   float diff = max(dot(norm, lightDir), 0.0);
-  vec3 diffuse = diffuseStrength * ((diff * material.diffuse) * lightColour);
+  //vec3 diffuse = diffuseStrength * ((diff * material.diffuse) * lightColour);
+  vec3 diffuse = diffuseStrength * diff * vec3(texture(material.diffuse, textureCoord));
 
   float specularStrength = 1.0; //0.5;
   vec3 viewDir = normalize(cameraPos - fragPos);

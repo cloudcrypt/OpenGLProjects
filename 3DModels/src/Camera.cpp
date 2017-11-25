@@ -15,9 +15,24 @@ void Camera::setView()
 	shaderProgram.setVec3("cameraPos", pos);
 }
 
-Camera::Camera(const ShaderProgram &sp, vec3 pos): shaderProgram(sp)
+Camera::Camera(const ShaderProgram &sp, BoundingBox boundingBox, vec3 pos): shaderProgram(sp)
 {
-	this->pos = pos;
+	float neededHeight;
+	float neededDistance;
+	if (boundingBox.y >= boundingBox.x && boundingBox.y >= boundingBox.z) {
+		neededHeight = (boundingBox.y / (float)2) * 1.5f;
+		neededDistance = neededHeight / glm::tan(glm::radians((float)45 / (float)2));
+	} else if (boundingBox.x >= boundingBox.y && boundingBox.x >= boundingBox.z) {
+		neededHeight = (boundingBox.x / (float)2) * 1.5f;
+		neededDistance = neededHeight / glm::tan(glm::radians((float)45 / (float)2));
+	} else {
+		neededDistance = boundingBox.z * 1.5f;
+	}
+
+	//float neededDistance = neededHeight / glm::tan(glm::radians((float)45 / (float)2));
+
+	this->pos = vec3(0.0f, 0.0f, neededDistance);
+
 	target = vec3(0.0f, 0.0f, 0.0f);
 	direction = normalize(target - pos);
 	up = vec3(0.0f, 1.0f, 0.0f);

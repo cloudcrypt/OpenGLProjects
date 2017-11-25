@@ -10,16 +10,18 @@ using std::string;
 struct Material {
 	float specularExp;
 	vec3 specular;
-	vec3 diffuse;
+	GLuint diffuse;
+	GLuint ao;
 	vec3 ambient;
 };
 
 class Model
 {
 public:
-	Model(string objFile, const ShaderProgram &sp);
+	Model(string modelName, const ShaderProgram &sp, string textureFile);
 	~Model();
 	void draw();
+	BoundingBox getBoundingBox();
 	void processKeyboard(int key);
 private:
 	mat4 modelMatrix;
@@ -38,7 +40,9 @@ private:
 	void setRoll();
 	void setModelMatrix();
 	void setMaterial();
+	void setTextures();
 	void loadModel(string objFile);
-	void loadMaterial(string mtlFile);
+	void loadMaterial(string mtlFile, string modelName);
+	void loadTextures(string modelName, string textureType);
 };
 

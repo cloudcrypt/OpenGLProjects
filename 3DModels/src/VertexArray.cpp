@@ -64,7 +64,7 @@ VertexArray::VertexArray(vector<Vertex> vertices)
 	if (OpenGL::error("glVertexAttribPointer 2"))
 		return;
 
-	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 	if (OpenGL::error("glEnableVertexAttribArray 2"))
 		return;
 

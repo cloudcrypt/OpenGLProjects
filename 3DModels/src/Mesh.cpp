@@ -48,6 +48,9 @@ Mesh::Mesh(vector<vec3> vertices, vector<vec2> uvs, vector<vec3> normals, vector
 	}
 	
 	center = vec3((xMin + xMax) / (float)2, (yMin + yMax) / (float)2, (zMin + zMax) / (float)2);
+	boundingBox.x = xMax - xMin;
+	boundingBox.y = yMax - yMin;
+	boundingBox.z = zMax - zMin;
 	va = new VertexArray(this->vertices);
 
 }

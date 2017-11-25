@@ -48,6 +48,8 @@ private:
 	mat4 projection;
 
 	vec3 lightPos = vec3(3.0f, 3.0f, 3.0f);
+
+	bool aoMode = false;
 	//mat4 transform;
 
 	char *windowName = "3DModels";
@@ -58,7 +60,6 @@ private:
 	float scaleFactor = 1.0f;
 
 	bool buttonPressed = false;
-	bool grayscale = false;
 	bool closedMode = false;
 
 	vec3 reverseTranslation = vec3(0.0, 0.0, 0.0);
@@ -78,6 +79,7 @@ private:
 	void setTransform();
 	void setQuantizationLevel(int level);
 	void setGrayscale();
+	void setAoMode();
 	void renderCurve();
 	void setCurrentControlPoints();
 

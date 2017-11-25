@@ -12,6 +12,12 @@ using std::vector;
 
 class VertexArray;
 
+struct BoundingBox {
+	float x;
+	float y;
+	float z;
+};
+
 struct Index {
 	int vIndex;
 	int vtIndex;
@@ -49,6 +55,7 @@ class Mesh
 {
 public:
 	vec3 center;
+	BoundingBox boundingBox;
 	Mesh(vector<vec3> vertices, vector<vec2> uvs, vector<vec3> normals, vector<Index> indices);
 	~Mesh();
 	void draw();
