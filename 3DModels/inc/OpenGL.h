@@ -1,5 +1,5 @@
 // ==========================================================================
-// CPSC 453 Assignment #2: Image Manipulation
+// CPSC 453 Assignment #3: 3D Models
 // Daniel Dastoor
 // OpenGL.h
 // Class to query and display OpenGl error messages

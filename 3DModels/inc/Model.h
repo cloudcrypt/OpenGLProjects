@@ -1,3 +1,11 @@
+// ==========================================================================
+// CPSC 453 Assignment #3: 3D Models
+// Daniel Dastoor
+//
+// Author: Daniel Dastoor
+// Date:   November 2017
+// ==========================================================================
+
 #pragma once
 
 #include <string>
@@ -37,10 +45,6 @@ private:
 
 	const ShaderProgram &shaderProgram;
 	vector<Mesh> meshes;
-	void setScaling();
-	void setPitch();
-	void setYaw();
-	void setRoll();
 	void setModelMatrix();
 	void setMaterial();
 	void setTextures();

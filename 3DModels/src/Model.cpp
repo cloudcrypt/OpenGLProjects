@@ -1,3 +1,11 @@
+// ==========================================================================
+// CPSC 453 Assignment #3: 3D Models
+// Daniel Dastoor
+//
+// Author: Daniel Dastoor
+// Date:   November 2017
+// ==========================================================================
+
 #include "Model.h"
 
 #include <iostream>
@@ -88,24 +96,6 @@ void Model::processKeyboard(int key)
 			//setModelMatrix();
 			break;
 	}
-}
-
-
-void Model::setScaling()
-{
-
-}
-
-void Model::setPitch()
-{
-}
-
-void Model::setYaw()
-{
-}
-
-void Model::setRoll()
-{
 }
 
 void Model::setModelMatrix()
@@ -217,11 +207,6 @@ void Model::loadMaterial(string mtlFile, string modelName)
 			sscanf_s(line.c_str(), "Ks %f %f %f", &specular.x, &specular.y, &specular.z);
 			material.specular = specular;
 		}
-		/*else if (line.substr(0, 2) == "Kd") {
-			vec3 diffuse;
-			sscanf_s(line.c_str(), "Kd %f %f %f", &diffuse.x, &diffuse.y, &diffuse.z);
-			material.diffuse = diffuse;
-		}*/
 		else if (line.substr(0, 2) == "Ka") {
 			vec3 ambient;
 			sscanf_s(line.c_str(), "Ka %f %f %f", &ambient.x, &ambient.y, &ambient.z);
@@ -233,9 +218,6 @@ void Model::loadMaterial(string mtlFile, string modelName)
 
 void Model::loadTextures(string modelName, string textureFile)
 {
-	/*if (textureType != "") {
-		textureType = "." + textureType;
-	}*/
 	string diffusePng = "objs/" + modelName + "/" + textureFile;
 	int x, y, channels;
 	float *pixels = stbi_loadf(diffusePng.c_str(), &x, &y, &channels, STBI_rgb);

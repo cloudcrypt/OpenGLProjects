@@ -1,11 +1,17 @@
+// ==========================================================================
+// CPSC 453 Assignment #3: 3D Models
+// Daniel Dastoor
+//
+// Author: Daniel Dastoor
+// Date:   November 2017
+// ==========================================================================
+
 #include "Mesh.h"
 
 #include "VertexArray.h"
 
 Mesh::Mesh(vector<vec3> vertices, vector<vec2> uvs, vector<vec3> normals, vector<Index> indices)
 {
-	//unsigned int currentValue = 0;
-	//std::map<Vertex, int>::iterator it;
 	float xMax = vertices.at(0).x;
 	float xMin = vertices.at(0).x;
 	float yMax = vertices.at(0).y;
@@ -36,15 +42,6 @@ Mesh::Mesh(vector<vec3> vertices, vector<vec2> uvs, vector<vec3> normals, vector
 		else if (v.position.z < zMin) {
 			zMin = v.position.z;
 		}
-		/*it = indexMap.find(v);
-		if (it == indexMap.end()) {
-			indexMap[v] = currentValue;
-			this->vertices.push_back(v);
-			this->indices.push_back(currentValue);
-			currentValue++;
-		} else {
-			this->indices.push_back(it->second);
-		}*/
 	}
 	
 	center = vec3((xMin + xMax) / (float)2, (yMin + yMax) / (float)2, (zMin + zMax) / (float)2);

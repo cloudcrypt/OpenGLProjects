@@ -1,3 +1,11 @@
+// ==========================================================================
+// CPSC 453 Assignment #3: 3D Models
+// Daniel Dastoor
+//
+// Author: Daniel Dastoor
+// Date:   November 2017
+// ==========================================================================
+
 #pragma once
 
 #include "glm/glm.hpp"
@@ -32,22 +40,3 @@ public:
 
 	~Camera();
 };
-
-//class A 
-//{
-//public:
-//	int testInt;
-//	string testStr;
-//	A() { }
-//};
-//
-//class B
-//{
-//public:
-//	const A &testA;
-//	B(const A &testA): testA(testA)
-//	{
-//		//testA.testStr = string("changeddd");
-//		//this->testA = &testA;
-//	}
-//};

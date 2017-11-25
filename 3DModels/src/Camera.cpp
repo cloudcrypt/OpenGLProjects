@@ -1,3 +1,11 @@
+// ==========================================================================
+// CPSC 453 Assignment #3: 3D Models
+// Daniel Dastoor
+//
+// Author: Daniel Dastoor
+// Date:   November 2017
+// ==========================================================================
+
 #include "Camera.h"
 
 #include "glm/gtc/matrix_transform.hpp"
@@ -28,8 +36,6 @@ Camera::Camera(const ShaderProgram &sp, BoundingBox boundingBox, vec3 pos): shad
 	} else {
 		neededDistance = boundingBox.z * 1.5f;
 	}
-
-	//float neededDistance = neededHeight / glm::tan(glm::radians((float)45 / (float)2));
 
 	this->pos = vec3(0.0f, 0.0f, neededDistance);
 

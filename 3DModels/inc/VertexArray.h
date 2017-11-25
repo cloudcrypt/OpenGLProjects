@@ -1,10 +1,8 @@
 // ==========================================================================
-// CPSC 453 Assignment #2: Image Manipulation
+// CPSC 453 Assignment #3: 3D Models
 // Daniel Dastoor
-// VertexArray.h
-// Class to create and draw vertex array objects.
 //
-// Author: Daniel Dastoor, based on code by Haysn Hornbeck.
+// Author: Daniel Dastoor
 // Date:   November 2017
 // ==========================================================================
 

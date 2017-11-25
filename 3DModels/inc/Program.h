@@ -1,8 +1,7 @@
 // ==========================================================================
-// CPSC 453 Assignment #2: Image Manipulation
+// CPSC 453 Assignment #3: 3D Models
 // Daniel Dastoor
 // Program.h
-// Class to display and manipulate images and catmull-rom splines.
 //
 // Author: Daniel Dastoor
 // Date:   November 2017
@@ -30,16 +29,6 @@ private:
 	GLFWwindow* window = nullptr;
 
 	ShaderProgram shaderProgram;
-	ShaderProgram tessellationProgram;
-
-	VertexArray* va;
-	VertexArray* currentControlPoints;
-
-	vector<float> controlPoints;
-	vector<float> readyPoints;
-
-	vector<VertexArray*> curves;
-	vector<VertexArray*> controlPointSets;
 
 	Model *objModel;
 	Camera *camera;
@@ -50,28 +39,17 @@ private:
 
 	vec3 lightPos = vec3(3.0f, 3.0f, 3.0f);
 
-	bool aoMode = false;
-	//mat4 transform;
+	bool aoMode = true;
 
 	char *windowName = "3DModels";
 	int width = 1024;
 	int originalWidth = width;
 	int height = 1024;
 	int originalHeight = height;
-	float scaleFactor = 1.0f;
 
 	void setReverseScaling();
 
-	bool buttonPressed = false;
-	bool closedMode = false;
-
-	vec3 reverseTranslation = vec3(0.0, 0.0, 0.0);
 	vec3 reverseScaling = vec3(1.0, 1.0, 1.0);
-	vec3 aspectRatioScaling = vec3(1.0, 1.0, 1.0);
-	vec2 pressOrigin;
-	vec2 releaseLocation;
-	vec2 previousTranslation = vec2(0.0, 0.0);
-	vec2 translation = vec2(0.0, 0.0);
 
 	mat4 reverseScalingMatrix;
 
@@ -80,28 +58,13 @@ private:
 	bool initGLEW();
 	bool initShaders();
 
-	void setModel();
-	void setTransform();
-	void setQuantizationLevel(int level);
-	void setGrayscale();
 	void setAoMode();
-	void renderCurve();
-	void setCurrentControlPoints();
 
 	static void sizeCallback(GLFWwindow* window, int width, int height);
 	void sizeChange(int width, int height);
 
 	static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void keyInput(int key, int scancode, int action, int mods);
-
-	static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-	void scrollChange(double xoffset, double yoffset);
-
-	static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-	void mouseButtonInput(int button, int action, int mods);
-
-	static void cursorPositionCallback(GLFWwindow* window, double xPos, double yPos);
-	void cursorPositionChange(double xPos, double yPos);
 
 	bool terminate(string message);
 
