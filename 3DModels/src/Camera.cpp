@@ -48,14 +48,22 @@ Camera::Camera(const ShaderProgram &sp, BoundingBox boundingBox, vec3 pos): shad
 void Camera::processKeyboard(int key)
 {
 	switch (key) {
-	case GLFW_KEY_LEFT:
-		pos -= normalize(cross(direction, up)) * speed;
-		setView();
-		break;
-	case GLFW_KEY_RIGHT:
-		pos += normalize(cross(direction, up)) * speed;
-		setView();
-		break;
+		case GLFW_KEY_LEFT:
+			pos -= normalize(cross(direction, up)) * speed;
+			setView();
+			break;
+		case GLFW_KEY_RIGHT:
+			pos += normalize(cross(direction, up)) * speed;
+			setView();
+			break;
+		case GLFW_KEY_UP:
+			pos.y += (speed / 2.0f);
+			setView();
+			break;
+		case GLFW_KEY_DOWN:
+			pos.y -= (speed / 2.0f);
+			setView();
+			break;
 	}
 }
 

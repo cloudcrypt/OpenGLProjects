@@ -47,7 +47,7 @@ int Program::run(int argc, const char ** argv)
 	setReverseScaling();
 
 	objModel = new Model(argv[1], shaderProgram, argv[2]);
-
+	simpleModel = objModel;
 	shaderProgram.bind();
 
 	camera = new Camera(shaderProgram, objModel->getBoundingBox());
@@ -193,6 +193,19 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 			aoMode = !aoMode;
 			setAoMode();
 			break;
+		case GLFW_KEY_C:
+			chessMode = !chessMode;
+			if (chessMode) {
+				if (chessModel == nullptr) {
+					chessModel = new ChessBoard(shaderProgram);
+				}
+				objModel = chessModel;
+				camera = new Camera(shaderProgram, chessModel->getBoundingBox());
+			} else {
+				objModel = simpleModel;
+				objModel->translate(0, 0, 0);
+				camera = new Camera(shaderProgram, simpleModel->getBoundingBox());
+			}
 	}
 }
 

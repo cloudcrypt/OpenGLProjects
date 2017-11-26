@@ -13,6 +13,7 @@
 #include "ShaderProgram.h"
 #include "VertexArray.h"
 #include "Camera.h"
+#include "ObjectBase.h"
 #include "Model.h"
 #include "glm/glm.hpp"
 #include "ChessBoard.h"
@@ -30,7 +31,9 @@ private:
 
 	ShaderProgram shaderProgram;
 
-	Model *objModel;
+	ObjectBase *objModel;
+	ObjectBase *simpleModel;
+	ObjectBase *chessModel;
 	Camera *camera;
 
 	mat4 model;
@@ -40,6 +43,7 @@ private:
 	vec3 lightPos = vec3(3.0f, 3.0f, 3.0f);
 
 	bool aoMode = true;
+	bool chessMode = false;
 
 	char *windowName = "3DModels";
 	int width = 1024;

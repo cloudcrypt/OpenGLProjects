@@ -38,7 +38,7 @@ void Model::draw()
 {
 	setMaterial();
 	setTextures();
-	setModelMatrix();
+	//setModelMatrix();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, material.diffuse);
 	glActiveTexture(GL_TEXTURE1);
@@ -53,6 +53,7 @@ void Model::translate(float x, float y, float z)
 	translation.x += x;
 	translation.y += y;
 	translation.z += z;
+	setModelMatrix();
 }
 
 BoundingBox Model::getBoundingBox()
@@ -63,37 +64,37 @@ BoundingBox Model::getBoundingBox()
 void Model::processKeyboard(int key)
 {
 	switch (key) {
-		case GLFW_KEY_UP:
+		case GLFW_KEY_EQUAL:
 			scaleFactor *= 1.1;
-			//setModelMatrix();
+			setModelMatrix();
 			break;
-		case GLFW_KEY_DOWN:
+		case GLFW_KEY_MINUS:
 			scaleFactor *= 0.9;
-			//setModelMatrix();
+			setModelMatrix();
 			break;
 		case GLFW_KEY_D:
 			yaw++;
-			//setModelMatrix();
+			setModelMatrix();
 			break;
 		case GLFW_KEY_A:
 			yaw--;
-			//setModelMatrix();
+			setModelMatrix();
 			break;
 		case GLFW_KEY_W:
 			pitch--;
-			//setModelMatrix();
+			setModelMatrix();
 			break;
 		case GLFW_KEY_S:
 			pitch++;
-			//setModelMatrix();
+			setModelMatrix();
 			break;
 		case GLFW_KEY_E:
 			roll--;
-			//setModelMatrix();
+			setModelMatrix();
 			break;
 		case GLFW_KEY_Q:
 			roll++;
-			//setModelMatrix();
+			setModelMatrix();
 			break;
 	}
 }

@@ -12,6 +12,7 @@
 #include <glm/glm.hpp>
 #include "Mesh.h"
 #include "ShaderProgram.h"
+#include "ObjectBase.h"
 
 using std::string;
 
@@ -23,7 +24,7 @@ struct Material {
 	vec3 ambient;
 };
 
-class Model
+class Model: public ObjectBase
 {
 public:
 
@@ -32,19 +33,21 @@ public:
 	int yaw = 0;								// rotation about y-axis
 	int roll = 0;								// rotation about z-axis
 
+	vector<Mesh> meshes;
+	mat4 modelMatrix;
+
 	Model(string modelName, const ShaderProgram &sp, string textureFile);
 	~Model();
 	void draw();
 	void translate(float x, float y, float z);
 	BoundingBox getBoundingBox();
 	void processKeyboard(int key);
+
 private:
-	mat4 modelMatrix;
 	Material material;
 	vec3 translation = vec3(0.0f, 0.0f, 0.0f);
 
 	const ShaderProgram &shaderProgram;
-	vector<Mesh> meshes;
 	void setModelMatrix();
 	void setMaterial();
 	void setTextures();
