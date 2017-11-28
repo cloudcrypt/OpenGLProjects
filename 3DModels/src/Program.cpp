@@ -159,6 +159,12 @@ void Program::setAoMode()
 	shaderProgram.setInt("aoMode", aoMode);
 }
 
+void Program::setTextureMode()
+{
+	shaderProgram.bind();
+	shaderProgram.setInt("textureMode", textureMode);
+}
+
 void Program::sizeCallback(GLFWwindow * window, int width, int height)
 {
 	static_cast<Program*>(glfwGetWindowUserPointer(window))->sizeChange(width, height);
@@ -192,6 +198,10 @@ void Program::keyInput(int key, int scancode, int action, int mods)
 		case GLFW_KEY_O:
 			aoMode = !aoMode;
 			setAoMode();
+			break;
+		case GLFW_KEY_T:
+			textureMode = !textureMode;
+			setTextureMode();
 			break;
 		case GLFW_KEY_C:
 			chessMode = !chessMode;
