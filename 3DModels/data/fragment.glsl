@@ -21,22 +21,36 @@ uniform vec3 lightColour = vec3(1, 1, 1);
 
 
 uniform bool aoMode = true;
+uniform bool textureMode = true;
 
 
 void main() {
   float ambientStrength = 0.2;
   vec3 ambient;
   if (aoMode) {
-	  ambient = vec3(texture(material.ao, textureCoord)) * vec3(texture(material.diffuse, textureCoord));
+	  if (textureMode) {
+	  	ambient = vec3(texture(material.ao, textureCoord)) * vec3(texture(material.diffuse, textureCoord));
+	  } else {
+	  	ambient = ambientStrength * (lightColour * material.ambient);
+    	  }
   } else {
-	  ambient = ambientStrength * vec3(texture(material.diffuse, textureCoord));
+	  if (textureMode) {
+      	  	ambient = ambientStrength * vec3(texture(material.diffuse, textureCoord));
+    	  } else {
+	  	ambient = ambientStrength * (lightColour * material.ambient);
+    	  }
   }
 
   float diffuseStrength = 0.5;
   vec3 norm = normalize(normal);
   vec3 lightDir = normalize(lightPos - fragPos);
   float diff = max(dot(norm, lightDir), 0.0);
-  vec3 diffuse = diffuseStrength * diff * vec3(texture(material.diffuse, textureCoord));
+  vec3 diffuse;
+  if (textureMode) {
+    diffuse = diffuseStrength * diff * vec3(texture(material.diffuse, textureCoord));
+  } else {
+    diffuse = diffuseStrength * ((diff * material.ambient) * lightColour);
+  }
 
   float specularStrength = 1.0;
   vec3 viewDir = normalize(cameraPos - fragPos);
