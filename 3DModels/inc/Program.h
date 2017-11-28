@@ -45,6 +45,7 @@ private:
 
 	bool aoMode = true;
 	bool chessMode = false;
+	bool textureMode = false;
 
 	char *windowName = "3DModels";
 	int width = 1024;
@@ -64,6 +65,7 @@ private:
 	bool initShaders();
 
 	void setAoMode();
+	void setTextureMode();
 
 	static void sizeCallback(GLFWwindow* window, int width, int height);
 	void sizeChange(int width, int height);
