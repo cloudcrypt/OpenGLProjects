@@ -45,7 +45,7 @@ private:
 
 	bool aoMode = true;
 	bool chessMode = false;
-	bool textureMode = false;
+	bool textureMode = true;
 
 	char *windowName = "3DModels";
 	int width = 1024;
