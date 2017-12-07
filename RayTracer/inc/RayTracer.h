@@ -11,7 +11,7 @@ class RayTracer {
 public:
     RayTracer(Scene *,int,int); //constructor
     Color trace(Ray, int);  // recursively traces a ray
-    Object * intersect(Ray); // compute intersection of ray and return the closest object
+    Object * intersect(Ray, Point&); // compute intersection of ray and return the closest object
 
     Color calculate(int,int); // compute the colour at a pixel
     Color Phong(Point,Point,Ray,Material*,Object *); // Local illumination at a point

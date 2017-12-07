@@ -49,6 +49,25 @@ Point Sphere::getIntersection(Ray r){
 
 	// YOUR INTERSECTION CODE HERE.
 	// RETURN THE POINT OF INTERSECTION FOR THIS SPHERE.
-    return Point::Infinite();  
+
+	Point L = r.p - center;
+	double a = 1;
+	double b = 2 * (r.v * L);
+	double c = (L * L) - (radius * radius);
+
+	double discrm = (b * b) - (4 * a * c);
+
+	double t;
+
+	if (discrm < 0)
+		return Point::Infinite();
+	else if (discrm == 0) {
+		t = -(b / (double)(2 * a));
+	} else {
+		t = (-b + sqrt(discrm)) / (double)(2 * a);
+	}
+
+
+	return r.p + (r.v * t);
 }
 

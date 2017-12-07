@@ -9,7 +9,7 @@ RayTracer::RayTracer(Scene * s, int maxd, int sm){
 // This function determines the closest object that a ray intersects.
 // The getIntersection() method is polymorphic. Please provide implementations
 // for all the objects in your scene (see Object.h and Object.cpp).
-Object * RayTracer::intersect(Ray r){
+Object * RayTracer::intersect(Ray r, Point &interPnt){
   scene->startIteration();
   Object * current = NULL;
   Object * minObject = NULL;
@@ -25,13 +25,39 @@ Object * RayTracer::intersect(Ray r){
       }
     }
   }
+  interPnt = min;
   return minObject;
 }
 
 // Trace a ray recursively
 Color RayTracer::trace(Ray r, int depth){
-  Color rad=Color(0.0,0.0,0.0,0.0);
+  Color rad=Color(0.2,0.2,0.2,1.0);
   
+  Object *hitObj;
+  Point interPnt;
+  if ((hitObj = intersect(r, interPnt)) == NULL) {
+	  return rad;
+  }
+  for (Point &light : scene->lights) {
+	  Ray *shadowRay = new Ray(interPnt, light - interPnt);
+	  Object *current = NULL;
+	  scene->startIteration();
+	  Point inter;
+	  bool illuminated = true;
+	  while ((current = scene->getNextObject()) != NULL) {
+		  inter = current->getIntersection(*shadowRay);
+		  if ((inter.x == Point::Infinite().x) && (inter.y == Point::Infinite().y) && (inter.z == Point::Infinite().z)) {
+			  continue;
+		  }
+		  if ((inter - shadowRay->p).length() < (light - shadowRay->p).length()) {
+			  illuminated = false;
+			  break;
+		  }
+	  }
+	  if (illuminated) {
+		  rad = hitObj->getMaterial()->diffuse;
+	  }
+  }
   // YOUR CODE FOR RECURSIVE RAY TRACING GOES HERE
   
   return rad;
