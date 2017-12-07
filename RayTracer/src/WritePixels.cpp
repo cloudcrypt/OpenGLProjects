@@ -17,7 +17,7 @@ RayTracer * rt;
 
 int main(){
     // Test scene with max depth of 4 and sampling of 1
-    rt = new RayTracer(Scene::initTestScene(width),4,1);
+    rt = new RayTracer(Scene::initTestScene(width),4,4);
     auto pixels = new float[width][height][4];
     for(int ctr = 0; ctr < height*width; ctr++){
     	int i = ctr % width;
@@ -45,7 +45,7 @@ int main(){
 				pixelColour = int(pixels[i][j][1] * 255);
 				testimage << pixelColour << " ";
 				pixelColour = int(pixels[i][j][2] * 255);
-				testimage << pixelColour << endl;
+				testimage << pixelColour << "\n";
 	        //}
 	    }
 	}

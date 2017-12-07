@@ -8,6 +8,7 @@ public:
     Color(float,float,float,float);
     Color operator+(Color);
     Color operator*(double);
+	Color operator*(Color);
     void clamp(float); // clamp each component of the color to the provided floating value.
     
 };

@@ -17,6 +17,11 @@ Color Color::operator*(double s){
     return Color(r*s,g*s,b*s,a*s);   
 }
 
+// Dot product
+Color Color::operator*(Color c) {
+	return Color(r*c.r, g*c.g, b*c.b, a*c.a);
+}
+
 void Color::clamp(float m){
     r = max(0.0f,min(m,r));
     g = max(0.0f, min(m,g));

@@ -38,26 +38,28 @@ Color RayTracer::trace(Ray r, int depth){
   if ((hitObj = intersect(r, interPnt)) == NULL) {
 	  return rad;
   }
-  for (Point &light : scene->lights) {
-	  Ray *shadowRay = new Ray(interPnt, light - interPnt);
-	  Object *current = NULL;
-	  scene->startIteration();
-	  Point inter;
-	  bool illuminated = true;
-	  while ((current = scene->getNextObject()) != NULL) {
-		  inter = current->getIntersection(*shadowRay);
-		  if ((inter.x == Point::Infinite().x) && (inter.y == Point::Infinite().y) && (inter.z == Point::Infinite().z)) {
-			  continue;
-		  }
-		  if ((inter - shadowRay->p).length() < (light - shadowRay->p).length()) {
-			  illuminated = false;
-			  break;
-		  }
-	  }
-	  if (illuminated) {
-		  rad = hitObj->getMaterial()->diffuse;
-	  }
-  }
+  rad = Phong(hitObj->getNormal(interPnt), interPnt, r, hitObj->getMaterial(), hitObj);
+  //for (Point &light : scene->lights) {
+	 // Ray *shadowRay = new Ray(interPnt, light - interPnt);
+	 // Object *current = NULL;
+	 // scene->startIteration();
+	 // Point inter;
+	 // bool illuminated = true;
+	 // /*while ((current = scene->getNextObject()) != NULL) {
+		//  inter = current->getIntersection(*shadowRay);
+		//  if ((inter.x == Point::Infinite().x) && (inter.y == Point::Infinite().y) && (inter.z == Point::Infinite().z)) {
+		//	  continue;
+		//  }
+		//  if ((inter - shadowRay->p).length() < (light - shadowRay->p).length()) {
+		//	  illuminated = false;
+		//	  break;
+		//  }
+	 // }*/
+	 // if (illuminated) {
+		//  rad = hitObj->getMaterial()->diffuse;
+
+	 // }
+  //}
   // YOUR CODE FOR RECURSIVE RAY TRACING GOES HERE
   
   return rad;
@@ -65,15 +67,48 @@ Color RayTracer::trace(Ray r, int depth){
 
 // Local Phong illumination at a point.
 Color RayTracer::Phong(Point normal,Point p, Ray r, Material * m, Object * o){
-  Color ret = Color(0.0, 0.0, 0.0, 0.0);
+	Color lightColor = Color(1.0, 1.0, 1.0, 1.0);
+	Color ret = Color(0.0, 0.0, 0.0, 0.0);
+
+	double diffuseStrength = 0.5;
+	double ambientStrength = 0.2;
+
+
+
+	ret = ret + ((lightColor * m->ambient) * ambientStrength);
   
-  // YOUR CODE HERE.
-  // There is ambient lighting irrespective of shadow.
-  // Specular-diffuse lighting only if the point is not in shadow
+	for (Point &light : scene->lights) {
+		Ray *shadowRay = new Ray(p, light - p);
+		Object *current = NULL;
+		scene->startIteration();
+		Point inter;
+		bool illuminated = true;
+		//while ((current = scene->getNextObject()) != NULL) {
+		//inter = current->getIntersection(*shadowRay);
+		//if ((inter.x == Point::Infinite().x) && (inter.y == Point::Infinite().y) && (inter.z == Point::Infinite().z)) {
+		//continue;
+		//}
+		//if ((inter - shadowRay->p).length() < (light - shadowRay->p).length()) {
+		//illuminated = false;
+		//break;
+		//}
+		//}
+		if (illuminated) {
+			Point lightDir = light - p;
+			lightDir.normalize();
+			double diff = max(normal * lightDir, 0.0);
+			ret = ret + (((m->diffuse * diff) * lightColor) * diffuseStrength);
+		}
+	}
+	// YOUR CODE HERE.
+	// There is ambient lighting irrespective of shadow.
+	// Specular-diffuse lighting only if the point is not in shadow
+
+
   
-  // Remember, you need to account for all the light sources.
+	// Remember, you need to account for all the light sources.
   
-  return ret;
+	return ret;
 }
 
 

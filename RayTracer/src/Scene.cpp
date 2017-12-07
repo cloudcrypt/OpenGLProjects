@@ -90,8 +90,10 @@ Scene * Scene::initTestScene(int N){
     sphere->type = REFLECTIVE;
     // give sphere some reflectivity;
     sphere->kr = 0.85;
-    sphere->ambient = Color(0.00,0.00,0.00,1.0);
-    sphere->diffuse = Color(0.0,0.0,0.0,1.0);
+    //sphere->ambient = Color(0.00,0.00,0.00,1.0);
+    //sphere->diffuse = Color(0.0,0.0,0.0,1.0);
+	sphere->ambient = Color(1.0, 0.5, 0.31, 1.0);
+	sphere->diffuse = Color(1.0, 0.5, 0.31, 1.0);
     sphere->specular = Color(0.0,0.0,0.0,1.0);
     Object * s1 = new Sphere(Point(400.0,130.0,320.0),120.0);
     //// Make points for square
