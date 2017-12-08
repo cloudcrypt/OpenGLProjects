@@ -26,8 +26,32 @@ Point Triangle::getIntersection(Ray r){
 
 	// YOUR INTERSECTION CODE HERE.
 	// RETURN THE POINT OF INTERSECTION FOR THIS TRIANGLE.
+	//Point p1p2 = p1 - p2;
+	//Point p1p3 = p1 - p3;
+	Point p1p2 = p2 - p1;
+	Point p1p3 = p3 - p1;
+	Point pVec = r.v.cross(p1p3);
+	float determinant = p1p2 * pVec;
 
-    return Point::Infinite();
+	float kEpsilon = 1e-8;
+	if (fabs(determinant) < kEpsilon)
+		return Point::Infinite();
+
+	float invDeterminant = 1 / determinant;
+	
+	Point tVec = r.p - p1;
+	float u = (tVec * pVec) * invDeterminant;
+	if (u < 0 || u > 1)
+		return Point::Infinite();
+
+	Point qVec = tVec.cross(p1p2);
+	float v = (r.v * qVec) * invDeterminant;
+	if (v < 0 || u + v > 1)
+		return Point::Infinite();
+
+	float t = (p1p3 * qVec) * invDeterminant;
+
+    return r.p + (r.v * t);
 }
 
 Point Triangle::getNormal(Point p){

@@ -70,7 +70,8 @@ Color RayTracer::Phong(Point normal,Point p, Ray r, Material * m, Object * o){
 	Color lightColor = Color(1.0, 1.0, 1.0, 1.0);
 	Color ret = Color(0.0, 0.0, 0.0, 0.0);
 
-	double diffuseStrength = 0.5;
+	//double diffuseStrength = 0.5;
+	double diffuseStrength = 1.0;
 	double ambientStrength = 0.2;
 
 
@@ -108,6 +109,8 @@ Color RayTracer::Phong(Point normal,Point p, Ray r, Material * m, Object * o){
   
 	// Remember, you need to account for all the light sources.
   
+	ret.clamp(1.0);
+
 	return ret;
 }
 
