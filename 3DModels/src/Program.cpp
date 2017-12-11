@@ -227,8 +227,8 @@ bool Program::terminate(string message)
 }
 
 int main(int argc, const char** argv) {
-	if (argc != 3) {
-		cerr << "Usage: 3DModels <modelName> <diffuseTextureFile>" << endl;
+	if (argc != 2) {
+		cerr << "Usage: rayTracer <modelName> <diffuseTextureFile>" << endl;
 		return 0;
 	}
 	Program p;

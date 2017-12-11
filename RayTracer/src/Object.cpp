@@ -51,6 +51,10 @@ Point Triangle::getIntersection(Ray r){
 
 	float t = (p1p3 * qVec) * invDeterminant;
 
+	if (t < 0.0) {
+		return Point::Infinite();
+	}
+
     return r.p + (r.v * t);
 }
 
@@ -83,12 +87,29 @@ Point Sphere::getIntersection(Ray r){
 
 	double t;
 
-	if (discrm < 0)
+	if (discrm < 0.0)
 		return Point::Infinite();
 	else if (discrm == 0) {
 		t = -(b / (double)(2 * a));
 	} else {
-		t = (-b + sqrt(discrm)) / (double)(2 * a);
+		double t0 = (-b + sqrt(discrm)) / (double)(2 * a);
+		double t1 = (-b - sqrt(discrm)) / (double)(2 * a);
+		if (t0 > t1) {
+			double temp = t0;
+			t0 = t1;
+			t1 = temp;
+		}
+		if (t0 < 0) {
+			if (t1 < 0) {
+				return Point::Infinite();
+			}
+			else {
+				t = t1;
+			}
+		}
+		else {
+			t = t0;
+		}
 	}
 
 

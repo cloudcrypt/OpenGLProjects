@@ -32,13 +32,26 @@ Object * RayTracer::intersect(Ray r, Point &interPnt){
 // Trace a ray recursively
 Color RayTracer::trace(Ray r, int depth){
   Color rad=Color(0.2,0.2,0.2,1.0);
+
+  if (depth > maxdepth) {
+	  return rad;
+  }
   
   Object *hitObj;
   Point interPnt;
   if ((hitObj = intersect(r, interPnt)) == NULL) {
 	  return rad;
   }
-  rad = Phong(hitObj->getNormal(interPnt), interPnt, r, hitObj->getMaterial(), hitObj);
+  /*if (hitObj == scene->objects[0]) {
+	  rad = Color(0.2, 0.2, 0.2, 1.0);
+  }*/
+  //rad = Phong(hitObj->getNormal(interPnt), interPnt, r, hitObj->getMaterial(), hitObj);
+  if (hitObj->getMaterial()->type == Type::REFLECTIVE) {
+	  rad = trace(r.reflect(hitObj->getNormal(interPnt), interPnt), depth + 1) * hitObj->getMaterial()->kr;
+  }
+  else {
+	  rad = Phong(hitObj->getNormal(interPnt), interPnt, r, hitObj->getMaterial(), hitObj);
+  }
   //for (Point &light : scene->lights) {
 	 // Ray *shadowRay = new Ray(interPnt, light - interPnt);
 	 // Object *current = NULL;
@@ -79,11 +92,26 @@ Color RayTracer::Phong(Point normal,Point p, Ray r, Material * m, Object * o){
 	ret = ret + ((lightColor * m->ambient) * ambientStrength);
   
 	for (Point &light : scene->lights) {
-		Ray *shadowRay = new Ray(p, light - p);
-		Object *current = NULL;
+
+		bool illuminated = true;
+
+		Point biasedPoint = p + (normal * (double)1.0);
+		Ray *shadowRay = new Ray(biasedPoint, light - biasedPoint);
+		//shadowRay->p = shadowRay->p + (normal * 1e-4);
+
+		Object *hitObj;
+		Point interPnt;
+		if ((hitObj = intersect(*shadowRay, interPnt)) != NULL) {
+			if (hitObj != o) {
+				if ((interPnt - biasedPoint).length() < (light - biasedPoint).length())
+					illuminated = false;
+			}
+		}
+
+		/*Object *current = NULL;
 		scene->startIteration();
 		Point inter;
-		bool illuminated = true;
+		bool illuminated = true;*/
 		//while ((current = scene->getNextObject()) != NULL) {
 		//inter = current->getIntersection(*shadowRay);
 		//if ((inter.x == Point::Infinite().x) && (inter.y == Point::Infinite().y) && (inter.z == Point::Infinite().z)) {
@@ -99,6 +127,13 @@ Color RayTracer::Phong(Point normal,Point p, Ray r, Material * m, Object * o){
 			lightDir.normalize();
 			double diff = max(normal * lightDir, 0.0);
 			ret = ret + (((m->diffuse * diff) * lightColor) * diffuseStrength);
+
+			Point viewDir = *scene->camera - p;
+			viewDir.normalize();
+			Ray lightRay = Ray(light, lightDir);
+			Point reflectDir = lightRay.reflect(normal, p).v;
+			double spec = pow(max(-(viewDir * reflectDir), 0.0), 32);
+			ret = ret + ((m->specular * spec) * lightColor);
 		}
 	}
 	// YOUR CODE HERE.
@@ -119,6 +154,9 @@ Color RayTracer::Phong(Point normal,Point p, Ray r, Material * m, Object * o){
 // through them.
 // Grid supersampling is also implemented.
 Color RayTracer::calculate(int x, int y){
+	//x = 330;
+	//y = 512 - 272; 
+	//y = 512 - 415;
   Color c = Color(0.0,0.0,0.0,0.0);
   for(int i = 1; i <= samples; i++){
     for(int j = 1; j <= samples; j++){

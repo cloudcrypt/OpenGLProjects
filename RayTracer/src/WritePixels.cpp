@@ -5,19 +5,40 @@
 
 #include "RayTracer.h"
 #include <fstream>
+
+
+#define IMAGE_RESOLUTION	512
+#define FIELD_OF_VIEW		55.0
+#define MAX_TRACING_DEPTH	4
+#define SUPER_SAMPLING		1
+
 using std::ofstream;
 using std::ifstream;
 
 // store width and height of the render
-const int width = 512;
-const int height = 512;
+const int width = IMAGE_RESOLUTION;
+const int height = IMAGE_RESOLUTION;
+const double fov = FIELD_OF_VIEW;
 
 // Our ray tracer
 RayTracer * rt;
 
-int main(){
-    // Test scene with max depth of 4 and sampling of 1
-    rt = new RayTracer(Scene::initTestScene(width),4,1);
+int main(int argc, const char** argv){
+	if (argc != 2) {
+		cerr << "Usage: rayTracer <sceneType>" << endl;
+		return 0;
+	}
+	if (argv[1] != "--default" && argv[1] != "--yours") {
+		cerr << "Usage: rayTracer <sceneType>" << endl;
+		return 0;
+	}
+	if (string(argv[1]) == "--default") {
+		// Test scene with max depth of 4 and sampling of 1
+		rt = new RayTracer(Scene::initTestScene(width, fov), MAX_TRACING_DEPTH, SUPER_SAMPLING);
+	}
+	else if (argv[1] == "--yours") {
+		rt = new RayTracer(Scene::initCustomScene(width, fov), MAX_TRACING_DEPTH, SUPER_SAMPLING);
+	}
     auto pixels = new float[width][height][4];
     for(int ctr = 0; ctr < height*width; ctr++){
     	int i = ctr % width;

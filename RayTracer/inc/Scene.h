@@ -22,12 +22,14 @@ class Scene {
     int N;
     
 
-    // A container to hold objects
-    vector<Object *> objects;
+    //// A container to hold objects
+    //vector<Object *> objects;
 
 
     int indexL,indexO;
 public:
+	// A container to hold objects
+	vector<Object *> objects;
     vector<Point> lights;
     Point * camera;
 
@@ -45,7 +47,8 @@ public:
     void setUpVector(Point *);
     void setDirectionVector(Point *);
     Ray makeRay(double,double);
-    static Scene* initTestScene(int);
+    static Scene* initTestScene(int,double);
+	static Scene* initCustomScene(int, double);
     // can add your own scene here.
     
 };
