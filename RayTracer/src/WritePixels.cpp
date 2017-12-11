@@ -10,7 +10,7 @@
 #define IMAGE_RESOLUTION	512
 #define FIELD_OF_VIEW		55.0
 #define MAX_TRACING_DEPTH	4
-#define SUPER_SAMPLING		1
+#define SUPER_SAMPLING		2
 
 using std::ofstream;
 using std::ifstream;
@@ -28,7 +28,7 @@ int main(int argc, const char** argv){
 		cerr << "Usage: rayTracer <sceneType>" << endl;
 		return 0;
 	}
-	if (argv[1] != "--default" && argv[1] != "--yours") {
+	if (string(argv[1]) != "--default" && string(argv[1]) != "--yours") {
 		cerr << "Usage: rayTracer <sceneType>" << endl;
 		return 0;
 	}
@@ -36,7 +36,7 @@ int main(int argc, const char** argv){
 		// Test scene with max depth of 4 and sampling of 1
 		rt = new RayTracer(Scene::initTestScene(width, fov), MAX_TRACING_DEPTH, SUPER_SAMPLING);
 	}
-	else if (argv[1] == "--yours") {
+	else if (string(argv[1]) == "--yours") {
 		rt = new RayTracer(Scene::initCustomScene(width, fov), MAX_TRACING_DEPTH, SUPER_SAMPLING);
 	}
     auto pixels = new float[width][height][4];
@@ -51,7 +51,11 @@ int main(int argc, const char** argv){
     }
     // once we are done calculating, we will write to file.
     ofstream testimage;
-	testimage.open("TestScene.ppm", ios::out);
+	if (string(argv[1]) == "--default") {
+		testimage.open("default.ppm", ios::out);
+	} else if (string(argv[1]) == "--yours") {
+		testimage.open("yours.ppm", ios::out);
+	}
 	testimage << "P3" << endl;
 	testimage << width << " " << height << endl;
 	testimage << "255" << endl;

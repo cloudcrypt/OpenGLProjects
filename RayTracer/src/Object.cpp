@@ -24,10 +24,6 @@ Sphere::Sphere(Point p, double r){
 
 Point Triangle::getIntersection(Ray r){
 
-	// YOUR INTERSECTION CODE HERE.
-	// RETURN THE POINT OF INTERSECTION FOR THIS TRIANGLE.
-	//Point p1p2 = p1 - p2;
-	//Point p1p3 = p1 - p3;
 	Point p1p2 = p2 - p1;
 	Point p1p3 = p3 - p1;
 	Point pVec = r.v.cross(p1p3);
@@ -74,9 +70,6 @@ Point Sphere::getNormal(Point p){
 }
 
 Point Sphere::getIntersection(Ray r){
-
-	// YOUR INTERSECTION CODE HERE.
-	// RETURN THE POINT OF INTERSECTION FOR THIS SPHERE.
 
 	Point L = r.p - center;
 	double a = 1;

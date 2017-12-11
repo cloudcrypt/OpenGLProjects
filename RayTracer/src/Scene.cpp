@@ -230,7 +230,7 @@ Scene * Scene::initCustomScene(int N, double fov) {
 	Scene * ret = new Scene(new Point(0, 1.0, 0), new Point(0, 0, 1.0), fov, N);
 	// Add in sphere
 	Material * test = new Material();
-	test->type = REFLECTIVE;
+	test->type = DIFFUSE;
 	test->kr = 0.60;
 	test->ambient = Color(0.0, 0.0, 0.0, 1.0);
 	test->diffuse = Color(0.0, 0.6, 0.6, 1.0);
@@ -252,8 +252,8 @@ Scene * Scene::initCustomScene(int N, double fov) {
 	Material * test3 = new Material();
 	test3->kr = 0.25;
 	test2->type = DIFFUSE;
-	test2->ambient = Color(0.6, 0.0, 0.0, 1.0);
-	test2->diffuse = Color(0.6, 0.0, 0.0, 1.0);
+	test2->ambient = Color(0.9, 0.0, 0.0, 1.0);
+	test2->diffuse = Color(0.9, 0.0, 0.0, 1.0);
 	test2->specular = Color(0.2, 0.2, 0.2, 1.0);
 
 	Material* sphere = new Material();
@@ -265,9 +265,9 @@ Scene * Scene::initCustomScene(int N, double fov) {
 	sphere->ambient = Color(1.0, 0.5, 0.31, 1.0);
 	sphere->diffuse = Color(1.0, 0.5, 0.31, 1.0);
 	sphere->specular = Color(0.0, 0.0, 0.0, 1.0);
-	Object * s1 = new Sphere(Point(400.0, 130.0, 320.0), 120.0);
-	Object * s2 = new Sphere(Point(100.0, 130.0, 450.0), 120.0);
-	Object * s3 = new Sphere(Point(200.0, 350.0, 320.0), 120.0);
+	Object * s1 = new Sphere(Point(430.0, 130.0, 220.0), 120.0);
+	Object * s2 = new Sphere(Point(175.0, 130.0, 450.0), 120.0);
+	Object * s3 = new Sphere(Point(250.0, 350.0, 320.0), 120.0);
 	// Make points for square
 	Point p1 = Point(0, 0, 0);
 	Point p2 = Point(550, 0, 0);
@@ -284,6 +284,8 @@ Scene * Scene::initCustomScene(int N, double fov) {
 	Point n4 = Point(-1.0, 0.0, 0.0);
 	Point n5 = Point(0.0, 0.0, -1.0);
 	s1->setMaterial(sphere);
+	s2->setMaterial(sphere);
+	s3->setMaterial(sphere);
 	ret->addObject(s1);
 	ret->addObject(s2);
 	ret->addObject(s3);
@@ -322,8 +324,8 @@ Scene * Scene::initCustomScene(int N, double fov) {
 	// Add in right square
 	t1 = new Triangle(p4, p2, p5, n4);
 	t2 = new Triangle(p4, p5, p6, n4);
-	t1->setMaterial(test3);
-	t2->setMaterial(test3);
+	t1->setMaterial(test);
+	t2->setMaterial(test);
 	ret->addObject(t1);
 	ret->addObject(t2);
 
@@ -333,60 +335,6 @@ Scene * Scene::initCustomScene(int N, double fov) {
 
 	// set Camera location
 	ret->setCamera(new Point(278, 273, -500));
-
-	// Now we will add in smaller box
-	Point v1 = Point(100, 165, 65);
-	Point v2 = Point(52, 165, 225);
-	Point v3 = Point(210, 165, 272);
-	Point v4 = Point(260, 165, 114);
-	Point v5 = Point(260, 0, 114);
-	Point v6 = Point(260, 165, 114);
-	Point v7 = Point(210, 165, 272);
-	Point v8 = Point(210, 0, 272);
-	Point v9 = Point(100, 0, 65);
-	Point v10 = Point(100, 165, 65);
-	Point v11 = Point(52, 0, 225);
-
-	Point no1 = Point(0.0, 1.0, 0.0);
-	Point no2 = Point(0.0, 0.0, -1.0);
-	Point no3 = Point(-1.0, 0.0, 0.0);
-	Point no4 = Point(1.0, 0.0, 0.0);
-	Point no5 = Point(0.0, 0.0, 1.0);
-
-	t1 = new Triangle(v2, v3, v1, no1);
-	t2 = new Triangle(v4, v1, v3, no1);
-	ret->addObject(t1);
-	ret->addObject(t2);
-	t1->setMaterial(test1);
-	t2->setMaterial(test1);
-
-	t1 = new Triangle(v7, v4, v9, no4);
-	t2 = new Triangle(v5, v7, v8, no4);
-	t1->setMaterial(test1);
-	t2->setMaterial(test1);
-	ret->addObject(t1);
-	ret->addObject(t2);
-
-	t1 = new Triangle(v9, v10, v4, no4);
-	t2 = new Triangle(v9, v4, v5, no4);
-	t1->setMaterial(test1);
-	t2->setMaterial(test1);
-	ret->addObject(t1);
-	ret->addObject(t2);
-
-	t1 = new Triangle(v11, v2, v10, no4);
-	t2 = new Triangle(v11, v2, v9, no4);
-	t1->setMaterial(test1);
-	t2->setMaterial(test1);
-	ret->addObject(t1);
-	ret->addObject(t2);
-
-	t1 = new Triangle(v8, v7, v2, no4);
-	t2 = new Triangle(v8, v7, v11, no4);
-	t1->setMaterial(test1);
-	t2->setMaterial(test1);
-	ret->addObject(t1);
-	ret->addObject(t2);
 
 	return ret;
 }
