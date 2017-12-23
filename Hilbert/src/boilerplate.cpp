@@ -1,7 +1,6 @@
 // ==========================================================================
 // CPSC 453 Assignment #1: Generating and Rendering a Hilbert Curve
 // Daniel Dastoor
-//  
 // Based on an Object-Oriented Boilerplate Code for GLFW
 //
 // Author: Daniel Dastoor, Kamyar Allahverdi, University of Calgary. Minor tweaks by Haysn Hornbeck.

@@ -1,7 +1,6 @@
 // ==========================================================================
 // CPSC 453 Assignment #1: Generating and Rendering a Hilbert Curve
 // Daniel Dastoor
-//  
 // Hilbert.cpp
 // Class to create and manipulate Hilbert curves
 //
